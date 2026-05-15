@@ -1,0 +1,88 @@
+-- Main entry point for EZOAuto.
+EZOAuto = EZOAuto or {}
+local EZOA = EZOAuto
+
+local ADDON_NAME = "EZOAuto"
+local LANGUAGE_AUTO = "auto"
+EZOA.runtime = EZOA.runtime or {}
+EZOA.runtime.debugMode = EZOA.runtime.debugMode == true
+
+local function Print(message)
+    if LibChatMessage then
+        LibChatMessage(ADDON_NAME, "EZOA"):Print(tostring(message))
+    else
+        d(tostring(message))
+    end
+end
+
+EZOA.Print = Print
+
+local function GetClientLanguage()
+    if type(GetCVar) == "function" then
+        local language = zo_strlower(tostring(GetCVar("Language.2") or ""))
+        local prefix = language:sub(1, 2)
+        if prefix == "es" then return "es" end
+        if prefix == "en" then return "en" end
+    end
+    return "en"
+end
+
+function EZOA.GetDefaultLanguage()
+    return LANGUAGE_AUTO
+end
+
+function EZOA.GetClientLanguage()
+    return GetClientLanguage()
+end
+
+function EZOA.GetEffectiveLanguage(language)
+    language = tostring(language or LANGUAGE_AUTO)
+    if language == "es" or language == "en" then
+        return language
+    end
+    return GetClientLanguage()
+end
+
+function EZOA.IsForcedLanguage(language)
+    language = tostring(language or LANGUAGE_AUTO)
+    return language == "es" or language == "en"
+end
+
+function EZOA:Initialize()
+    local world = GetWorldName()
+    local defaults = {
+        general = {
+            language = LANGUAGE_AUTO,
+            debugMode = false,
+        },
+        automation = {
+            sellOrnateAtMerchant = false,
+            sellTreasuresAtMerchant = false,
+            repairEquippedAtMerchant = false,
+        },
+    }
+
+    self.sv = ZO_SavedVars:NewAccountWide("EZOAuto_Saved", 1, world, defaults)
+    self.runtime = self.runtime or {}
+    self.runtime.debugMode = self.sv and self.sv.general and self.sv.general.debugMode == true
+
+    if EZOAuto_Lang and EZOAuto_Lang.Apply then
+        EZOAuto_Lang.Apply(self.sv.general.language or LANGUAGE_AUTO)
+    end
+
+    if self.DebugLog then
+        self.DebugLog(GetString(EZOA_DEBUG_SAVED_VARIABLES_LOADED))
+    end
+
+    if EZOAuto_Menu and EZOAuto_Menu.Init then
+        EZOAuto_Menu.Init()
+    end
+
+    Print(GetString(EZOA_MSG_INIT))
+end
+
+EVENT_MANAGER:RegisterForEvent(ADDON_NAME, EVENT_ADD_ON_LOADED, function(_, name)
+    if name ~= ADDON_NAME then return end
+    EVENT_MANAGER:UnregisterForEvent(ADDON_NAME, EVENT_ADD_ON_LOADED)
+    EZOAuto:Initialize()
+end)
