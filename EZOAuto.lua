@@ -1,4 +1,4 @@
--- Main entry point for EZOAuto.
+-- Arranque principal del addon.
 EZOAuto = EZOAuto or {}
 local EZOA = EZOAuto
 
@@ -58,11 +58,13 @@ function EZOA:Initialize()
         automation = {
             sellOrnateAtMerchant = false,
             sellTreasuresAtMerchant = false,
+            sellTrashAtMerchant = false,
             repairEquippedAtMerchant = false,
+            repairEquippedAndInventoryAtMerchant = false,
         },
     }
 
-    self.sv = ZO_SavedVars:NewAccountWide("EZOAuto_Saved", 1, world, defaults)
+    self.sv = ZO_SavedVars:NewCharacterIdSettings("EZOAuto_Saved", 1, world, defaults)
     self.runtime = self.runtime or {}
     self.runtime.debugMode = self.sv and self.sv.general and self.sv.general.debugMode == true
 
@@ -76,6 +78,10 @@ function EZOA:Initialize()
 
     if EZOAuto_Menu and EZOAuto_Menu.Init then
         EZOAuto_Menu.Init()
+    end
+
+    if EZOAuto_Merchant and EZOAuto_Merchant.Init then
+        EZOAuto_Merchant.Init()
     end
 
     Print(GetString(EZOA_MSG_INIT))

@@ -1,4 +1,4 @@
--- LibAddonMenu panel for EZOAuto.
+-- Panel de opciones de LibAddonMenu.
 EZOAuto_Menu = EZOAuto_Menu or {}
 local MENU = EZOAuto_Menu
 
@@ -18,7 +18,7 @@ local function GetOptions()
         {
             type          = "dropdown",
             name          = GetString(EZOA_OPTION_LANGUAGE),
-            choices       = { GetString(EZOA_OPTION_LANGUAGE_AUTO), "English", "Espanol" },
+            choices       = { GetString(EZOA_OPTION_LANGUAGE_AUTO), "English", "Español" },
             choicesValues = { "auto", "en", "es" },
             getFunc       = function() return EZOA.sv.general.language or "auto" end,
             setFunc       = function(value)
@@ -58,10 +58,35 @@ local function GetOptions()
         },
         {
             type    = "checkbox",
+            name    = GetString(EZOA_OPTION_SELL_TRASH),
+            tooltip = GetString(EZOA_OPTION_SELL_TRASH_TOOLTIP),
+            getFunc = function() return EZOA.sv.automation.sellTrashAtMerchant == true end,
+            setFunc = function(value) EZOA.sv.automation.sellTrashAtMerchant = value == true end,
+            default = false,
+            width   = "full",
+        },
+        {
+            type    = "checkbox",
             name    = GetString(EZOA_OPTION_REPAIR_EQUIPPED),
             tooltip = GetString(EZOA_OPTION_REPAIR_EQUIPPED_TOOLTIP),
             getFunc = function() return EZOA.sv.automation.repairEquippedAtMerchant == true end,
             setFunc = function(value) EZOA.sv.automation.repairEquippedAtMerchant = value == true end,
+            disabled = function() return EZOA.sv.automation.repairEquippedAndInventoryAtMerchant == true end,
+            default = false,
+            width   = "full",
+        },
+        {
+            type    = "checkbox",
+            name    = GetString(EZOA_OPTION_REPAIR_EQUIPPED_AND_INVENTORY),
+            tooltip = GetString(EZOA_OPTION_REPAIR_EQUIPPED_AND_INVENTORY_TOOLTIP),
+            getFunc = function() return EZOA.sv.automation.repairEquippedAndInventoryAtMerchant == true end,
+            setFunc = function(value)
+                value = value == true
+                EZOA.sv.automation.repairEquippedAndInventoryAtMerchant = value
+                if value then
+                    EZOA.sv.automation.repairEquippedAtMerchant = false
+                end
+            end,
             default = false,
             width   = "full",
         },

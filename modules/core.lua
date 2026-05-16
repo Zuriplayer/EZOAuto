@@ -1,4 +1,4 @@
--- Global constants for EZOAuto.
+-- Datos basicos que usa todo el addon.
 EZOAuto.ADDON_NAME    = "EZOAuto"
-EZOAuto.ADDON_VERSION = "0.1.1"
+EZOAuto.ADDON_VERSION = "0.1.3"
 EZOAuto.AUTHOR        = "@Zuriplayer"

@@ -1,5 +1,5 @@
--- Debug logging for EZOAuto.
--- Technical messages go to LibDebugLogger/DebugLogViewer only, never to chat.
+-- Registro de depuracion para EZOAuto.
+-- Lo tecnico va al Debug Viewer; el chat queda para avisos utiles.
 EZOAuto = EZOAuto or {}
 
 local EZOA = EZOAuto
@@ -79,6 +79,11 @@ function EZOA.DebugLog(message)
     if type(logger.SetMinLevelOverride) == "function" and type(lib) == "table" and lib.LOG_LEVEL_DEBUG ~= nil then
         pcall(function()
             logger:SetMinLevelOverride(lib.LOG_LEVEL_DEBUG)
+        end)
+    end
+    if type(logger.SetLogTracesOverride) == "function" then
+        pcall(function()
+            logger:SetLogTracesOverride(false)
         end)
     end
 

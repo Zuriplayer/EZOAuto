@@ -1,4 +1,4 @@
--- Minimal i18n layer for EZOAuto.
+-- Capa sencilla para elegir idioma sin complicar el addon.
 EZOAuto_Lang = EZOAuto_Lang or {}
 
 local function ApplyString(id, value, version)
