@@ -1,6 +1,6 @@
 # Deconstruccion automatica
 
-Estado: documentado para futuro. No se implementa todavia.
+Estado: fase 1 en preparacion. EZOAuto puede hacer una vista previa en Debug Viewer al abrir un deconstructor universal, pero todavia no deconstruye ni anade objetos a la lista de ESO.
 
 Primero hay que probar bien las ventas de mercader. Esta funcion destruye objetos, asi que no debe entrar en el addon hasta tener confirmada la ruta de APIs de ESO y unas pruebas claras en teclado y gamepad.
 
@@ -75,6 +75,8 @@ Fase 1: deteccion sin accion.
 - Detectar entrada en estacion/deconstructor.
 - Confirmar si es deconstruccion real y no refinado, mejora, creacion ni investigacion.
 - Escribir en Debug Viewer cuantos candidatos habria, sin tocar objetos.
+
+Implementado inicialmente para deconstructor universal y para vista previa en estaciones normales al entrar en modo deconstruccion/extraccion. En estaciones normales se limita el escaneo al `craftingType` de la estacion abierta para no contar objetos que solo podrian deconstruirse en otra mesa.
 
 Fase 2: filtros.
 

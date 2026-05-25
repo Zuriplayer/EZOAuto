@@ -61,6 +61,14 @@ function EZOA:Initialize()
             sellTrashAtMerchant = false,
             repairEquippedAtMerchant = false,
             repairEquippedAndInventoryAtMerchant = false,
+            switchToGroupChat = false,
+            previewDeconstructionAtStation = false,
+            deconstructIncludeInventory = true,
+            deconstructIncludeBank = false,
+            deconstructWeapons = true,
+            deconstructArmor = true,
+            deconstructJewelry = true,
+            deconstructGlyphs = true,
         },
     }
 
@@ -82,6 +90,14 @@ function EZOA:Initialize()
 
     if EZOAuto_Merchant and EZOAuto_Merchant.Init then
         EZOAuto_Merchant.Init()
+    end
+
+    if EZOAuto_Chat and EZOAuto_Chat.Init then
+        EZOAuto_Chat.Init()
+    end
+
+    if EZOAuto_Deconstruction and EZOAuto_Deconstruction.Init then
+        EZOAuto_Deconstruction.Init()
     end
 
     Print(GetString(EZOA_MSG_INIT))
