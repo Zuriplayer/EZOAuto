@@ -63,12 +63,21 @@ function EZOA:Initialize()
             repairEquippedAndInventoryAtMerchant = false,
             switchToGroupChat = false,
             previewDeconstructionAtStation = false,
+            queueDeconstructionAtStation = false,
             deconstructIncludeInventory = true,
             deconstructIncludeBank = false,
             deconstructWeapons = true,
             deconstructArmor = true,
             deconstructJewelry = true,
             deconstructGlyphs = true,
+            hideGroupNameplatesInGroup = false,
+            hideGroupNameplatesInCombat = false,
+        },
+        nameplates = {
+            groupMemberNameplatesManaged = false,
+            groupMemberNameplatesOriginal = nil,
+            groupMemberHealthbarsManaged = false,
+            groupMemberHealthbarsOriginal = nil,
         },
     }
 
@@ -94,6 +103,10 @@ function EZOA:Initialize()
 
     if EZOAuto_Chat and EZOAuto_Chat.Init then
         EZOAuto_Chat.Init()
+    end
+
+    if EZOAuto_Nameplates and EZOAuto_Nameplates.Init then
+        EZOAuto_Nameplates.Init()
     end
 
     if EZOAuto_Deconstruction and EZOAuto_Deconstruction.Init then

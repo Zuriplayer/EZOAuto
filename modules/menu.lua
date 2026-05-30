@@ -99,6 +99,36 @@ local function GetOptions()
             default = false,
             width   = "full",
         },
+        { type = "header", name = GetString(EZOA_OPTION_GROUP_VISIBILITY) },
+        { type = "description", text = GetString(EZOA_OPTION_GROUP_VISIBILITY_NOTE), width = "full" },
+        {
+            type    = "checkbox",
+            name    = GetString(EZOA_OPTION_HIDE_GROUP_NAMES_GROUPED),
+            tooltip = GetString(EZOA_OPTION_HIDE_GROUP_NAMES_GROUPED_TOOLTIP),
+            getFunc = function() return EZOA.sv.automation.hideGroupNameplatesInGroup == true end,
+            setFunc = function(value)
+                EZOA.sv.automation.hideGroupNameplatesInGroup = value == true
+                if EZOAuto_Nameplates and EZOAuto_Nameplates.Refresh then
+                    EZOAuto_Nameplates.Refresh("settings changed")
+                end
+            end,
+            default = false,
+            width   = "full",
+        },
+        {
+            type    = "checkbox",
+            name    = GetString(EZOA_OPTION_HIDE_GROUP_NAMES_COMBAT),
+            tooltip = GetString(EZOA_OPTION_HIDE_GROUP_NAMES_COMBAT_TOOLTIP),
+            getFunc = function() return EZOA.sv.automation.hideGroupNameplatesInCombat == true end,
+            setFunc = function(value)
+                EZOA.sv.automation.hideGroupNameplatesInCombat = value == true
+                if EZOAuto_Nameplates and EZOAuto_Nameplates.Refresh then
+                    EZOAuto_Nameplates.Refresh("settings changed")
+                end
+            end,
+            default = false,
+            width   = "full",
+        },
         { type = "header", name = GetString(EZOA_OPTION_DECONSTRUCTION) },
         { type = "description", text = GetString(EZOA_OPTION_DECONSTRUCTION_NOTE), width = "full" },
         {
@@ -112,11 +142,23 @@ local function GetOptions()
         },
         {
             type    = "checkbox",
+            name    = GetString(EZOA_OPTION_DECON_QUEUE),
+            tooltip = GetString(EZOA_OPTION_DECON_QUEUE_TOOLTIP),
+            getFunc = function() return EZOA.sv.automation.queueDeconstructionAtStation == true end,
+            setFunc = function(value) EZOA.sv.automation.queueDeconstructionAtStation = value == true end,
+            default = false,
+            width   = "full",
+        },
+        {
+            type    = "checkbox",
             name    = GetString(EZOA_OPTION_DECON_INCLUDE_INVENTORY),
             tooltip = GetString(EZOA_OPTION_DECON_INCLUDE_INVENTORY_TOOLTIP),
             getFunc = function() return EZOA.sv.automation.deconstructIncludeInventory == true end,
             setFunc = function(value) EZOA.sv.automation.deconstructIncludeInventory = value == true end,
-            disabled = function() return EZOA.sv.automation.previewDeconstructionAtStation ~= true end,
+            disabled = function()
+                return EZOA.sv.automation.previewDeconstructionAtStation ~= true
+                    and EZOA.sv.automation.queueDeconstructionAtStation ~= true
+            end,
             default = true,
             width   = "full",
         },
@@ -126,7 +168,10 @@ local function GetOptions()
             tooltip = GetString(EZOA_OPTION_DECON_INCLUDE_BANK_TOOLTIP),
             getFunc = function() return EZOA.sv.automation.deconstructIncludeBank == true end,
             setFunc = function(value) EZOA.sv.automation.deconstructIncludeBank = value == true end,
-            disabled = function() return EZOA.sv.automation.previewDeconstructionAtStation ~= true end,
+            disabled = function()
+                return EZOA.sv.automation.previewDeconstructionAtStation ~= true
+                    and EZOA.sv.automation.queueDeconstructionAtStation ~= true
+            end,
             default = false,
             width   = "full",
         },
@@ -136,7 +181,10 @@ local function GetOptions()
             tooltip = GetString(EZOA_OPTION_DECON_WEAPONS_TOOLTIP),
             getFunc = function() return EZOA.sv.automation.deconstructWeapons == true end,
             setFunc = function(value) EZOA.sv.automation.deconstructWeapons = value == true end,
-            disabled = function() return EZOA.sv.automation.previewDeconstructionAtStation ~= true end,
+            disabled = function()
+                return EZOA.sv.automation.previewDeconstructionAtStation ~= true
+                    and EZOA.sv.automation.queueDeconstructionAtStation ~= true
+            end,
             default = true,
             width   = "full",
         },
@@ -146,7 +194,10 @@ local function GetOptions()
             tooltip = GetString(EZOA_OPTION_DECON_ARMOR_TOOLTIP),
             getFunc = function() return EZOA.sv.automation.deconstructArmor == true end,
             setFunc = function(value) EZOA.sv.automation.deconstructArmor = value == true end,
-            disabled = function() return EZOA.sv.automation.previewDeconstructionAtStation ~= true end,
+            disabled = function()
+                return EZOA.sv.automation.previewDeconstructionAtStation ~= true
+                    and EZOA.sv.automation.queueDeconstructionAtStation ~= true
+            end,
             default = true,
             width   = "full",
         },
@@ -156,7 +207,10 @@ local function GetOptions()
             tooltip = GetString(EZOA_OPTION_DECON_JEWELRY_TOOLTIP),
             getFunc = function() return EZOA.sv.automation.deconstructJewelry == true end,
             setFunc = function(value) EZOA.sv.automation.deconstructJewelry = value == true end,
-            disabled = function() return EZOA.sv.automation.previewDeconstructionAtStation ~= true end,
+            disabled = function()
+                return EZOA.sv.automation.previewDeconstructionAtStation ~= true
+                    and EZOA.sv.automation.queueDeconstructionAtStation ~= true
+            end,
             default = true,
             width   = "full",
         },
@@ -166,7 +220,10 @@ local function GetOptions()
             tooltip = GetString(EZOA_OPTION_DECON_GLYPHS_TOOLTIP),
             getFunc = function() return EZOA.sv.automation.deconstructGlyphs == true end,
             setFunc = function(value) EZOA.sv.automation.deconstructGlyphs = value == true end,
-            disabled = function() return EZOA.sv.automation.previewDeconstructionAtStation ~= true end,
+            disabled = function()
+                return EZOA.sv.automation.previewDeconstructionAtStation ~= true
+                    and EZOA.sv.automation.queueDeconstructionAtStation ~= true
+            end,
             default = true,
             width   = "full",
         },

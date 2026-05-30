@@ -1,6 +1,6 @@
 # Deconstruccion automatica
 
-Estado: fase 1 en preparacion. EZOAuto puede hacer una vista previa en Debug Viewer al abrir un deconstructor universal, pero todavia no deconstruye ni anade objetos a la lista de ESO.
+Estado: fase 2 en preparacion. EZOAuto puede hacer una vista previa en Debug Viewer y tambien dejar candidatos seguros en la lista de deconstruccion de ESO. Todavia no pulsa el boton final ni destruye objetos por su cuenta.
 
 Primero hay que probar bien las ventas de mercader. Esta funcion destruye objetos, asi que no debe entrar en el addon hasta tener confirmada la ruta de APIs de ESO y unas pruebas claras en teclado y gamepad.
 
@@ -91,6 +91,8 @@ Fase 3: accion real.
 - No pulsar botones por el usuario.
 - No forzar pestanas sin verificar el estado exacto de la interfaz.
 - Probar teclado y gamepad por separado.
+
+Implementado inicialmente como preparacion de cola: se llama a `AddItemToCraft(bagId, slotIndex)` sobre el control de ESO que ya esta abierto. En deconstructor universal se respeta el filtro activo con `ZO_UniversalDeconstructionPanel_Shared.DoesItemPassFilter`, igual que la referencia revisada. Queda fuera, a proposito, pulsar el boton final de deconstruccion.
 
 ## Pendientes antes de programar
 

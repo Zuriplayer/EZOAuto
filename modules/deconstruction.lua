@@ -1,4 +1,4 @@
--- Primera fase de deconstruccion: mirar y contar, sin tocar objetos.
+-- Deconstruccion segura: primero mira, y si se le pide prepara la lista de ESO.
 EZOAuto_Deconstruction = EZOAuto_Deconstruction or {}
 
 local DECON = EZOAuto_Deconstruction
@@ -50,6 +50,15 @@ end
 local function IsPreviewEnabled()
     local automation = GetAutomation()
     return automation and automation.previewDeconstructionAtStation == true
+end
+
+local function IsQueueEnabled()
+    local automation = GetAutomation()
+    return automation and automation.queueDeconstructionAtStation == true
+end
+
+local function IsAutomationEnabled()
+    return IsPreviewEnabled() or IsQueueEnabled()
 end
 
 local function IsUniversalDeconstructor(craftingMode)
@@ -279,6 +288,7 @@ local function NewStats(station, craftingTypes)
         eligible = 0,
         eligibleByCategory = {},
         eligibleByBag = {},
+        candidates = {},
         skipped = {},
     }
 end
@@ -351,6 +361,11 @@ local function AddCandidateIfSafe(bagId, slotIndex, stats)
     stats.eligible = stats.eligible + 1
     AddCount(stats.eligibleByCategory, category)
     AddCount(stats.eligibleByBag, GetBagLabel(bagId))
+    stats.candidates[#stats.candidates + 1] = {
+        bagId = bagId,
+        slotIndex = slotIndex,
+        category = category,
+    }
 end
 
 local function ScanBag(bagId, stats)
@@ -384,16 +399,178 @@ local function DebugPreviewSummary(stats)
         .. ", skipped=" .. FormatCounts(stats.skipped) .. ".")
 end
 
-local function RunPreview(station, craftingTypes)
-    if not IsPreviewEnabled() then return end
+local function IsGamepadMode()
+    return type(IsInGamepadPreferredMode) == "function" and IsInGamepadPreferredMode() == true
+end
+
+local function GetCraftingControl(station)
+    if IsGamepadMode() then
+        if station == "universal" then return _G.UNIVERSAL_DECONSTRUCTION_GAMEPAD end
+        if station == "enchanting" then return _G.GAMEPAD_ENCHANTING end
+        return _G.SMITHING_GAMEPAD
+    end
+
+    if station == "universal" then return _G.UNIVERSAL_DECONSTRUCTION end
+    if station == "enchanting" then return _G.ENCHANTING end
+    return _G.SMITHING
+end
+
+local function NewQueueStats()
+    return {
+        queued = 0,
+        alreadySlotted = 0,
+        skipped = {},
+        queuedByCategory = {},
+        queuedByBag = {},
+    }
+end
+
+local function GetUniversalFilter(control)
+    local inventory = control and control.deconstructionPanel and control.deconstructionPanel.inventory
+    if not inventory or type(inventory.GetCurrentFilterType) ~= "function" then
+        return nil, "universal filter state missing"
+    end
+
+    local ok, filterType = pcall(function()
+        return inventory:GetCurrentFilterType()
+    end)
+    if not ok then
+        return nil, "universal filter state failed"
+    end
+
+    return filterType, nil
+end
+
+local function PassesUniversalFilter(candidate, filterType)
+    if type(ZO_UniversalDeconstructionPanel_Shared) ~= "table"
+        or type(ZO_UniversalDeconstructionPanel_Shared.DoesItemPassFilter) ~= "function" then
+        return nil, "universal filter api missing"
+    end
+
+    local ok, passes = pcall(ZO_UniversalDeconstructionPanel_Shared.DoesItemPassFilter, candidate.bagId, candidate.slotIndex, filterType)
+    if not ok then
+        return nil, "universal filter failed"
+    end
+    if passes ~= true then
+        return false, "current universal filter"
+    end
+    return true, nil
+end
+
+local function IsAlreadySlotted(control, candidate)
+    if not control or type(control.IsItemAlreadySlottedToCraft) ~= "function" then
+        return false, nil
+    end
+
+    local ok, alreadySlotted = pcall(function()
+        return control:IsItemAlreadySlottedToCraft(candidate.bagId, candidate.slotIndex)
+    end)
+    if not ok then
+        return false, "slot check failed"
+    end
+    return alreadySlotted == true, nil
+end
+
+local function AddCandidateToCraft(control, candidate, stats)
+    local alreadySlotted, slotReason = IsAlreadySlotted(control, candidate)
+    if slotReason then
+        AddCount(stats.skipped, slotReason)
+        return
+    end
+    if alreadySlotted then
+        stats.alreadySlotted = stats.alreadySlotted + 1
+        return
+    end
+
+    if not control or type(control.AddItemToCraft) ~= "function" then
+        AddCount(stats.skipped, "craft list api missing")
+        return
+    end
+
+    local ok = pcall(function()
+        control:AddItemToCraft(candidate.bagId, candidate.slotIndex)
+    end)
+    if not ok then
+        AddCount(stats.skipped, "add to craft failed")
+        return
+    end
+
+    local nowSlotted = true
+    if type(control.IsItemAlreadySlottedToCraft) == "function" then
+        local slotReason
+        nowSlotted, slotReason = IsAlreadySlotted(control, candidate)
+        if slotReason then
+            AddCount(stats.skipped, slotReason)
+            nowSlotted = true
+        end
+    end
+    if nowSlotted ~= true then
+        AddCount(stats.skipped, "add to craft rejected")
+        return
+    end
+
+    stats.queued = stats.queued + 1
+    AddCount(stats.queuedByCategory, candidate.category)
+    AddCount(stats.queuedByBag, GetBagLabel(candidate.bagId))
+end
+
+local function QueueCandidates(station, candidates)
+    local stats = NewQueueStats()
+    local control = GetCraftingControl(station)
+    if not control then
+        AddCount(stats.skipped, "craft control missing")
+        return stats
+    end
+
+    local universalFilter
+    if station == "universal" then
+        local filterReason
+        universalFilter, filterReason = GetUniversalFilter(control)
+        if filterReason then
+            AddCount(stats.skipped, filterReason, #candidates)
+            return stats
+        end
+    end
+
+    for _, candidate in ipairs(candidates) do
+        if station == "universal" then
+            local passes, filterReason = PassesUniversalFilter(candidate, universalFilter)
+            if passes ~= true then
+                AddCount(stats.skipped, filterReason)
+            else
+                AddCandidateToCraft(control, candidate, stats)
+            end
+        else
+            AddCandidateToCraft(control, candidate, stats)
+        end
+    end
+
+    return stats
+end
+
+local function DebugQueueSummary(station, scanStats, queueStats)
+    DebugLog("Deconstruction queue prepared: station=" .. tostring(station)
+        .. ", scanned=" .. tostring(scanStats.scanned)
+        .. ", eligible=" .. tostring(scanStats.eligible)
+        .. " (" .. FormatCounts(scanStats.eligibleByCategory) .. ")"
+        .. ", queued=" .. tostring(queueStats.queued)
+        .. " (" .. FormatCounts(queueStats.queuedByCategory) .. ")"
+        .. ", alreadySlotted=" .. tostring(queueStats.alreadySlotted)
+        .. ", queuedBags=" .. FormatCounts(queueStats.queuedByBag)
+        .. ", skipped=" .. FormatCounts(scanStats.skipped)
+        .. ", queueSkipped=" .. FormatCounts(queueStats.skipped) .. ".")
+end
+
+local function RunAutomation(station, craftingTypes)
+    if not IsAutomationEnabled() then return end
     if type(IsPlayerInCombat) == "function" and IsPlayerInCombat() then
-        DebugLog("Deconstruction preview skipped: player is in combat.")
+        DebugLog("Deconstruction skipped: player is in combat.")
         return
     end
 
     local bags = BuildBagList()
     if #bags == 0 then
-        DebugLog("Deconstruction preview skipped: no bags selected.")
+        DebugLog("Deconstruction skipped: no bags selected.")
         return
     end
 
@@ -401,24 +578,30 @@ local function RunPreview(station, craftingTypes)
     for _, bagId in ipairs(bags) do
         ScanBag(bagId, stats)
     end
-    DebugPreviewSummary(stats)
+
+    if IsQueueEnabled() then
+        local queueStats = QueueCandidates(station, stats.candidates)
+        DebugQueueSummary(station, stats, queueStats)
+    elseif IsPreviewEnabled() then
+        DebugPreviewSummary(stats)
+    end
 end
 
-local function SchedulePreview(station, craftingTypes)
-    if not IsPreviewEnabled() then return end
+local function ScheduleAutomation(station, craftingTypes)
+    if not IsAutomationEnabled() then return end
 
     DECON.atStation = true
     DECON.scanSequence = (DECON.scanSequence or 0) + 1
     local scanSequence = DECON.scanSequence
     zo_callLater(function()
         if DECON.atStation and DECON.scanSequence == scanSequence then
-            RunPreview(station, craftingTypes)
+            RunAutomation(station, craftingTypes)
         end
     end, SCAN_DELAY_MS)
 end
 
 local function ScheduleNormalStationPreview(source, retryCount)
-    if not IsPreviewEnabled() then return end
+    if not IsAutomationEnabled() then return end
     local craftingType = GetCurrentCraftingType()
     if not IsKnownDeconstructionCraft(craftingType) then
         retryCount = tonumber(retryCount) or 0
@@ -429,20 +612,20 @@ local function ScheduleNormalStationPreview(source, retryCount)
             return
         end
 
-        DebugLog("Deconstruction preview skipped: unknown crafting type from " .. tostring(source) .. ".")
+        DebugLog("Deconstruction skipped: unknown crafting type from " .. tostring(source) .. ".")
         return
     end
 
-    SchedulePreview(GetStationName(craftingType), { craftingType })
+    ScheduleAutomation(GetStationName(craftingType), { craftingType })
 end
 
 local function OnCraftingStationInteract(_, craftingType, _, craftingMode)
-    if not IsPreviewEnabled() then return end
+    if not IsAutomationEnabled() then return end
 
     DECON.currentCraftingType = craftingType
     InstallHooks()
     if IsUniversalDeconstructor(craftingMode) then
-        SchedulePreview("universal", nil)
+        ScheduleAutomation("universal", nil)
     elseif CRAFTING_TYPE_ENCHANTING ~= nil and craftingType == CRAFTING_TYPE_ENCHANTING then
         zo_callLater(function()
             ScheduleCurrentEnchantingPreview("keyboard enchanting current")
