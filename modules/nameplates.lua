@@ -52,83 +52,131 @@ local function IsHealthbarApiReady()
     return NAMEPLATE_TYPE_GROUP_MEMBER_HEALTHBARS ~= nil
 end
 
-local function ShouldHide()
+local function IsPvEWorld()
+    local checked = false
+
+    if type(IsPlayerInAvAWorld) == "function" then
+        checked = true
+        local ok, isAvA = pcall(IsPlayerInAvAWorld)
+        if ok and isAvA == true then return false end
+    end
+
+    if type(IsActiveWorldBattleground) == "function" then
+        checked = true
+        local ok, isBattleground = pcall(IsActiveWorldBattleground)
+        if ok and isBattleground == true then return false end
+    end
+
+    return checked
+end
+
+local function ShouldHideGroupIndicators()
     local automation = GetAutomation()
     if not automation or not IsGrouped() then return false end
+    if not IsPvEWorld() then return false end
     if automation.hideGroupNameplatesInGroup == true then return true end
     return automation.hideGroupNameplatesInCombat == true and IsInCombat()
 end
 
-local function GetCurrentGroupNameplateSetting()
-    return GetSetting(SETTING_TYPE_NAMEPLATES, NAMEPLATE_TYPE_GROUP_MEMBER_NAMEPLATES)
+function NAMEPLATES.NormalizeSettings()
+    local automation = GetAutomation()
+    if not automation then return end
+    if automation.hideGroupNameplatesInGroup == true then
+        automation.hideGroupNameplatesInCombat = false
+    end
 end
 
-local function GetCurrentGroupHealthbarSetting()
-    return GetSetting(SETTING_TYPE_NAMEPLATES, NAMEPLATE_TYPE_GROUP_MEMBER_HEALTHBARS)
+local function GetCurrentSetting(settingKey)
+    return GetSetting(SETTING_TYPE_NAMEPLATES, settingKey)
 end
 
-local function SetGroupNameplateSetting(value)
-    SetSetting(SETTING_TYPE_NAMEPLATES, NAMEPLATE_TYPE_GROUP_MEMBER_NAMEPLATES, tostring(value))
+local function SetNameplateSetting(settingKey, value)
+    SetSetting(SETTING_TYPE_NAMEPLATES, settingKey, tostring(value))
 end
 
-local function SetGroupHealthbarSetting(value)
-    SetSetting(SETTING_TYPE_NAMEPLATES, NAMEPLATE_TYPE_GROUP_MEMBER_HEALTHBARS, tostring(value))
+local function HideManagedSetting(state, managedKey, originalKey, settingKey)
+    if settingKey == nil then return false end
+
+    local changed = false
+    if state[managedKey] ~= true then
+        state[originalKey] = GetCurrentSetting(settingKey)
+        state[managedKey] = true
+        changed = true
+    end
+
+    SetNameplateSetting(settingKey, NAMEPLATE_CHOICE_NEVER)
+    return changed
 end
 
-local function HideGroupIndicators(reason)
+local function RestoreManagedSetting(state, managedKey, originalKey, settingKey)
+    if settingKey == nil or state[managedKey] ~= true then return false end
+
+    local original = state[originalKey]
+    if original ~= nil then
+        SetNameplateSetting(settingKey, original)
+    end
+
+    state[managedKey] = false
+    state[originalKey] = nil
+    return true
+end
+
+local function ApplyManagedPair(reason, shouldHide, nameplateType, healthbarType, nameManagedKey, nameOriginalKey, healthManagedKey, healthOriginalKey, label)
     local state = GetState()
     if not state then return end
     local changed = false
 
-    if state.groupMemberNameplatesManaged ~= true then
-        state.groupMemberNameplatesOriginal = GetCurrentGroupNameplateSetting()
-        state.groupMemberNameplatesManaged = true
-        changed = true
-    end
-    if IsHealthbarApiReady() and state.groupMemberHealthbarsManaged ~= true then
-        state.groupMemberHealthbarsOriginal = GetCurrentGroupHealthbarSetting()
-        state.groupMemberHealthbarsManaged = true
-        changed = true
+    if shouldHide then
+        changed = HideManagedSetting(state, nameManagedKey, nameOriginalKey, nameplateType) or changed
+        changed = HideManagedSetting(state, healthManagedKey, healthOriginalKey, healthbarType) or changed
+        if changed then
+            DebugLog(label .. " hidden: " .. tostring(reason) .. ".")
+        end
+        return
     end
 
-    SetGroupNameplateSetting(NAMEPLATE_CHOICE_NEVER)
-    if IsHealthbarApiReady() then
-        SetGroupHealthbarSetting(NAMEPLATE_CHOICE_NEVER)
-    end
+    changed = RestoreManagedSetting(state, nameManagedKey, nameOriginalKey, nameplateType) or changed
+    changed = RestoreManagedSetting(state, healthManagedKey, healthOriginalKey, healthbarType) or changed
     if changed then
-        DebugLog("Group nameplates and health bars hidden: " .. tostring(reason) .. ".")
+        DebugLog(label .. " restored: " .. tostring(reason) .. ".")
     end
 end
 
-local function RestoreGroupIndicators(reason)
+local function ApplyGroupIndicators(reason)
+    ApplyManagedPair(reason, ShouldHideGroupIndicators(),
+        NAMEPLATE_TYPE_GROUP_MEMBER_NAMEPLATES,
+        IsHealthbarApiReady() and NAMEPLATE_TYPE_GROUP_MEMBER_HEALTHBARS or nil,
+        "groupMemberNameplatesManaged",
+        "groupMemberNameplatesOriginal",
+        "groupMemberHealthbarsManaged",
+        "groupMemberHealthbarsOriginal",
+        "Group nameplates and health bars")
+end
+
+local function RestoreLegacyPvPIndicators(reason)
     local state = GetState()
     if not state then return end
     local changed = false
 
-    if state.groupMemberNameplatesManaged == true then
-        local original = state.groupMemberNameplatesOriginal
-        if original ~= nil then
-            SetGroupNameplateSetting(original)
-        end
-
-        state.groupMemberNameplatesManaged = false
-        state.groupMemberNameplatesOriginal = nil
-        changed = true
-    end
-
-    if IsHealthbarApiReady() and state.groupMemberHealthbarsManaged == true then
-        local original = state.groupMemberHealthbarsOriginal
-        if original ~= nil then
-            SetGroupHealthbarSetting(original)
-        end
-
-        state.groupMemberHealthbarsManaged = false
-        state.groupMemberHealthbarsOriginal = nil
-        changed = true
-    end
+    changed = RestoreManagedSetting(state,
+        "pvpFriendlyPlayerNameplatesManaged",
+        "pvpFriendlyPlayerNameplatesOriginal",
+        NAMEPLATE_TYPE_FRIENDLY_PLAYER_NAMEPLATES) or changed
+    changed = RestoreManagedSetting(state,
+        "pvpFriendlyPlayerHealthbarsManaged",
+        "pvpFriendlyPlayerHealthbarsOriginal",
+        NAMEPLATE_TYPE_FRIENDLY_PLAYER_HEALTHBARS) or changed
+    changed = RestoreManagedSetting(state,
+        "pvpEnemyPlayerNameplatesManaged",
+        "pvpEnemyPlayerNameplatesOriginal",
+        NAMEPLATE_TYPE_ENEMY_PLAYER_NAMEPLATES) or changed
+    changed = RestoreManagedSetting(state,
+        "pvpEnemyPlayerHealthbarsManaged",
+        "pvpEnemyPlayerHealthbarsOriginal",
+        NAMEPLATE_TYPE_ENEMY_PLAYER_HEALTHBARS) or changed
 
     if changed then
-        DebugLog("Group nameplates and health bars restored: " .. tostring(reason) .. ".")
+        DebugLog("Legacy PvP nameplate settings restored: " .. tostring(reason) .. ".")
     end
 end
 
@@ -138,11 +186,9 @@ function NAMEPLATES.Refresh(reason)
         return
     end
 
-    if ShouldHide() then
-        HideGroupIndicators(reason)
-    else
-        RestoreGroupIndicators(reason)
-    end
+    NAMEPLATES.NormalizeSettings()
+    ApplyGroupIndicators(reason)
+    RestoreLegacyPvPIndicators(reason)
 end
 
 local function RefreshSoon(reason)

@@ -107,7 +107,11 @@ local function GetOptions()
             tooltip = GetString(EZOA_OPTION_HIDE_GROUP_NAMES_GROUPED_TOOLTIP),
             getFunc = function() return EZOA.sv.automation.hideGroupNameplatesInGroup == true end,
             setFunc = function(value)
-                EZOA.sv.automation.hideGroupNameplatesInGroup = value == true
+                value = value == true
+                EZOA.sv.automation.hideGroupNameplatesInGroup = value
+                if value then
+                    EZOA.sv.automation.hideGroupNameplatesInCombat = false
+                end
                 if EZOAuto_Nameplates and EZOAuto_Nameplates.Refresh then
                     EZOAuto_Nameplates.Refresh("settings changed")
                 end
@@ -126,6 +130,7 @@ local function GetOptions()
                     EZOAuto_Nameplates.Refresh("settings changed")
                 end
             end,
+            disabled = function() return EZOA.sv.automation.hideGroupNameplatesInGroup == true end,
             default = false,
             width   = "full",
         },
