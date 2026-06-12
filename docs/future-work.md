@@ -1,41 +1,49 @@
-# Pendientes de analisis
+# Estado y pendientes
 
 Este archivo recoge ideas que no deben implementarse hasta confirmar APIs reales de ESO, impacto en teclado/gamepad y encaje con la filosofia de EZOAuto.
 
-## Validacion pendiente de la version actual
+## Validado en 0.1.15
 
-- Probar carga del addon sin errores Lua.
-- Probar `/reloadui`.
-- Abrir el panel LAM y confirmar persistencia de idioma.
-- Confirmar persistencia de casillas.
-- Confirmar que teclado y gamepad no cambian input.
-- Probar visibilidad de grupo en PvE:
+- Carga del addon sin errores Lua.
+- `/reloadui`.
+- Apertura del panel LAM.
+- Persistencia de idioma.
+- Persistencia de casillas.
+- Teclado y gamepad sin cambios de input.
+- Visibilidad de grupo en PvE:
   - ocultar nombres y barras al estar en grupo;
   - ocultar nombres y barras solo en combate;
   - restaurar valores al salir de grupo, salir de combate o desactivar casillas.
-- Probar que la visibilidad de grupo no se aplica en AvA ni Battleground, y que restaura cualquier valor gestionado por EZOAuto.
+- Visibilidad de grupo bloqueada en AvA y Battleground, restaurando cualquier valor gestionado por EZOAuto.
 
 ## Deconstruccion segura
 
 Estado actual: EZOAuto puede previsualizar candidatos y preparar la cola de deconstruccion usando la interfaz de ESO. No pulsa el boton final ni destruye objetos automaticamente.
 
+Validado:
+
+- Deconstructor universal con inventario y banco.
+- Estaciones normales: herreria, ropa, carpinteria, joyeria y encantamiento.
+- Teclado y gamepad.
+- Ruta actual de deconstruccion segura sin confirmacion final.
+
 Pendiente:
 
-- Probar deconstructor universal con inventario y banco.
-- Probar estaciones normales: herreria, ropa, carpinteria, joyeria y encantamiento.
-- Probar teclado y gamepad por separado.
-- Confirmar la ruta segura para detectar asistente de deconstruccion.
+- Confirmar la ruta segura para detectar asistente de deconstruccion si se quiere cubrir de forma explicita.
 - Decidir si queda permanentemente como "preparar cola" o si alguna vez se analiza una confirmacion final. Por defecto, no automatizar la confirmacion final.
 
 ## Chat de grupo
 
 Estado actual: EZOAuto cambia al canal de grupo al entrar en grupo y tambien despues de `/reloadui` si ya estabas agrupado.
 
+Validado:
+
+- Entrada real en grupo desde personaje solo.
+- `/reloadui` estando ya en grupo.
+- No abre la caja de chat ni envia mensajes.
+
 Pendiente:
 
-- Probar entrada real en grupo desde personaje solo.
-- Probar `/reloadui` estando ya en grupo.
-- Confirmar que no abre la caja de chat ni envia mensajes.
 - Revisar si conviene restaurar el canal anterior al salir del grupo. No implementado por decision expresa pendiente.
 
 ## Finder de grupo
