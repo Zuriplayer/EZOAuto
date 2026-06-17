@@ -62,6 +62,20 @@ function EZOA:Initialize()
             repairEquippedAtMerchant = false,
             repairEquippedAndInventoryAtMerchant = false,
             switchToGroupChat = false,
+            autoAcceptDungeonFinder = false,
+            autoAcceptVeteranDungeonFinder = false,
+            autoAcceptBattlegroundFinder = false,
+            autoAcceptTributeCasualFinder = false,
+            autoAcceptTributeCompetitiveFinder = false,
+            autoAcceptTrialFinder = false,
+            autoAcceptArenaFinder = false,
+            autoAcceptEndlessArchiveFinder = false,
+            autoAcceptHomeToursFinder = false,
+            autoAcceptExplorationFinder = false,
+            activityFinderSoundAlert = false,
+            activityFinderSoundRepeatSeconds = 2,
+            autoDismissPetInTrial = false,
+            autoCloseBooks = false,
             previewDeconstructionAtStation = false,
             queueDeconstructionAtStation = false,
             deconstructIncludeInventory = true,
@@ -103,6 +117,18 @@ function EZOA:Initialize()
 
     if EZOAuto_Chat and EZOAuto_Chat.Init then
         EZOAuto_Chat.Init()
+    end
+
+    if EZOAuto_ActivityFinder and EZOAuto_ActivityFinder.Init then
+        EZOAuto_ActivityFinder.Init()
+    end
+
+    if EZOAuto_Pets and EZOAuto_Pets.Init then
+        EZOAuto_Pets.Init()
+    end
+
+    if EZOAuto_Books and EZOAuto_Books.Init then
+        EZOAuto_Books.Init()
     end
 
     if EZOAuto_Nameplates and EZOAuto_Nameplates.Init then

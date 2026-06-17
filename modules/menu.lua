@@ -11,6 +11,34 @@ local function WarnForcedLanguage()
     end
 end
 
+local function SetActivityFinderOption(key, value)
+    EZOAuto.sv.automation[key] = value == true
+    if EZOAuto_ActivityFinder and EZOAuto_ActivityFinder.RefreshRegistration then
+        EZOAuto_ActivityFinder.RefreshRegistration()
+    end
+end
+
+local function SetActivityFinderNumberOption(key, value)
+    EZOAuto.sv.automation[key] = tonumber(value) or 0
+    if EZOAuto_ActivityFinder and EZOAuto_ActivityFinder.RefreshRegistration then
+        EZOAuto_ActivityFinder.RefreshRegistration()
+    end
+end
+
+local function SetPetOption(key, value)
+    EZOAuto.sv.automation[key] = value == true
+    if EZOAuto_Pets and EZOAuto_Pets.RefreshRegistration then
+        EZOAuto_Pets.RefreshRegistration()
+    end
+end
+
+local function SetBookOption(key, value)
+    EZOAuto.sv.automation[key] = value == true
+    if EZOAuto_Books and EZOAuto_Books.RefreshRegistration then
+        EZOAuto_Books.RefreshRegistration()
+    end
+end
+
 local function GetOptions()
     local EZOA = EZOAuto
     local options = {
@@ -96,6 +124,138 @@ local function GetOptions()
             tooltip = GetString(EZOA_OPTION_GROUP_CHAT_TOOLTIP),
             getFunc = function() return EZOA.sv.automation.switchToGroupChat == true end,
             setFunc = function(value) EZOA.sv.automation.switchToGroupChat = value == true end,
+            default = false,
+            width   = "full",
+        },
+        {
+            type    = "checkbox",
+            name    = GetString(EZOA_OPTION_AUTO_DISMISS_PET_TRIAL),
+            tooltip = GetString(EZOA_OPTION_AUTO_DISMISS_PET_TRIAL_TOOLTIP),
+            getFunc = function() return EZOA.sv.automation.autoDismissPetInTrial == true end,
+            setFunc = function(value) SetPetOption("autoDismissPetInTrial", value) end,
+            default = false,
+            width   = "full",
+        },
+        {
+            type    = "checkbox",
+            name    = GetString(EZOA_OPTION_AUTO_CLOSE_BOOKS),
+            tooltip = GetString(EZOA_OPTION_AUTO_CLOSE_BOOKS_TOOLTIP),
+            getFunc = function() return EZOA.sv.automation.autoCloseBooks == true end,
+            setFunc = function(value) SetBookOption("autoCloseBooks", value) end,
+            default = false,
+            width   = "full",
+        },
+        { type = "header", name = GetString(EZOA_OPTION_ACTIVITY_FINDER) },
+        { type = "description", text = GetString(EZOA_OPTION_ACTIVITY_FINDER_NOTE), width = "full" },
+        {
+            type    = "checkbox",
+            name    = GetString(EZOA_OPTION_AF_SOUND_ALERT),
+            tooltip = GetString(EZOA_OPTION_AF_SOUND_ALERT_TOOLTIP),
+            getFunc = function() return EZOA.sv.automation.activityFinderSoundAlert == true end,
+            setFunc = function(value) SetActivityFinderOption("activityFinderSoundAlert", value) end,
+            default = false,
+            width   = "full",
+        },
+        {
+            type    = "slider",
+            name    = GetString(EZOA_OPTION_AF_SOUND_REPEAT_SECONDS),
+            tooltip = GetString(EZOA_OPTION_AF_SOUND_REPEAT_SECONDS_TOOLTIP),
+            min     = 2,
+            max     = 15,
+            step    = 1,
+            getFunc = function() return EZOA.sv.automation.activityFinderSoundRepeatSeconds or 2 end,
+            setFunc = function(value) SetActivityFinderNumberOption("activityFinderSoundRepeatSeconds", value) end,
+            disabled = function() return EZOA.sv.automation.activityFinderSoundAlert ~= true end,
+            default = 2,
+            width   = "full",
+        },
+        {
+            type    = "checkbox",
+            name    = GetString(EZOA_OPTION_AF_DUNGEON),
+            tooltip = GetString(EZOA_OPTION_AF_DUNGEON_TOOLTIP),
+            getFunc = function() return EZOA.sv.automation.autoAcceptDungeonFinder == true end,
+            setFunc = function(value) SetActivityFinderOption("autoAcceptDungeonFinder", value) end,
+            default = false,
+            width   = "full",
+        },
+        {
+            type    = "checkbox",
+            name    = GetString(EZOA_OPTION_AF_VETERAN_DUNGEON),
+            tooltip = GetString(EZOA_OPTION_AF_VETERAN_DUNGEON_TOOLTIP),
+            getFunc = function() return EZOA.sv.automation.autoAcceptVeteranDungeonFinder == true end,
+            setFunc = function(value) SetActivityFinderOption("autoAcceptVeteranDungeonFinder", value) end,
+            default = false,
+            width   = "full",
+        },
+        {
+            type    = "checkbox",
+            name    = GetString(EZOA_OPTION_AF_BATTLEGROUND),
+            tooltip = GetString(EZOA_OPTION_AF_BATTLEGROUND_TOOLTIP),
+            getFunc = function() return EZOA.sv.automation.autoAcceptBattlegroundFinder == true end,
+            setFunc = function(value) SetActivityFinderOption("autoAcceptBattlegroundFinder", value) end,
+            default = false,
+            width   = "full",
+        },
+        {
+            type    = "checkbox",
+            name    = GetString(EZOA_OPTION_AF_TRIBUTE_CASUAL),
+            tooltip = GetString(EZOA_OPTION_AF_TRIBUTE_CASUAL_TOOLTIP),
+            getFunc = function() return EZOA.sv.automation.autoAcceptTributeCasualFinder == true end,
+            setFunc = function(value) SetActivityFinderOption("autoAcceptTributeCasualFinder", value) end,
+            default = false,
+            width   = "full",
+        },
+        {
+            type    = "checkbox",
+            name    = GetString(EZOA_OPTION_AF_TRIBUTE_COMPETITIVE),
+            tooltip = GetString(EZOA_OPTION_AF_TRIBUTE_COMPETITIVE_TOOLTIP),
+            getFunc = function() return EZOA.sv.automation.autoAcceptTributeCompetitiveFinder == true end,
+            setFunc = function(value) SetActivityFinderOption("autoAcceptTributeCompetitiveFinder", value) end,
+            default = false,
+            width   = "full",
+        },
+        {
+            type    = "checkbox",
+            name    = GetString(EZOA_OPTION_AF_TRIAL),
+            tooltip = GetString(EZOA_OPTION_AF_TRIAL_TOOLTIP),
+            getFunc = function() return EZOA.sv.automation.autoAcceptTrialFinder == true end,
+            setFunc = function(value) SetActivityFinderOption("autoAcceptTrialFinder", value) end,
+            default = false,
+            width   = "full",
+        },
+        {
+            type    = "checkbox",
+            name    = GetString(EZOA_OPTION_AF_ARENA),
+            tooltip = GetString(EZOA_OPTION_AF_ARENA_TOOLTIP),
+            getFunc = function() return EZOA.sv.automation.autoAcceptArenaFinder == true end,
+            setFunc = function(value) SetActivityFinderOption("autoAcceptArenaFinder", value) end,
+            default = false,
+            width   = "full",
+        },
+        {
+            type    = "checkbox",
+            name    = GetString(EZOA_OPTION_AF_ENDLESS_ARCHIVE),
+            tooltip = GetString(EZOA_OPTION_AF_ENDLESS_ARCHIVE_TOOLTIP),
+            getFunc = function() return EZOA.sv.automation.autoAcceptEndlessArchiveFinder == true end,
+            setFunc = function(value) SetActivityFinderOption("autoAcceptEndlessArchiveFinder", value) end,
+            default = false,
+            width   = "full",
+        },
+        {
+            type    = "checkbox",
+            name    = GetString(EZOA_OPTION_AF_HOME_TOURS),
+            tooltip = GetString(EZOA_OPTION_AF_HOME_TOURS_TOOLTIP),
+            getFunc = function() return EZOA.sv.automation.autoAcceptHomeToursFinder == true end,
+            setFunc = function(value) SetActivityFinderOption("autoAcceptHomeToursFinder", value) end,
+            default = false,
+            width   = "full",
+        },
+        {
+            type    = "checkbox",
+            name    = GetString(EZOA_OPTION_AF_EXPLORATION),
+            tooltip = GetString(EZOA_OPTION_AF_EXPLORATION_TOOLTIP),
+            getFunc = function() return EZOA.sv.automation.autoAcceptExplorationFinder == true end,
+            setFunc = function(value) SetActivityFinderOption("autoAcceptExplorationFinder", value) end,
             default = false,
             width   = "full",
         },

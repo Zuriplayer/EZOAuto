@@ -197,6 +197,12 @@ local function IsGlyph(itemType)
         or (ITEMTYPE_GLYPH_JEWELRY ~= nil and itemType == ITEMTYPE_GLYPH_JEWELRY)
 end
 
+local function IsEnchantingRune(itemType)
+    return (ITEMTYPE_ENCHANTING_RUNE_ASPECT ~= nil and itemType == ITEMTYPE_ENCHANTING_RUNE_ASPECT)
+        or (ITEMTYPE_ENCHANTING_RUNE_ESSENCE ~= nil and itemType == ITEMTYPE_ENCHANTING_RUNE_ESSENCE)
+        or (ITEMTYPE_ENCHANTING_RUNE_POTENCY ~= nil and itemType == ITEMTYPE_ENCHANTING_RUNE_POTENCY)
+end
+
 local function IsJewelry(bagId, slotIndex)
     local equipmentType = GetEquipmentTypeSafe(bagId, slotIndex)
     return (EQUIP_TYPE_RING ~= nil and equipmentType == EQUIP_TYPE_RING)
@@ -206,7 +212,7 @@ end
 local function GetCategory(bagId, slotIndex)
     local itemType = GetItemTypeSafe(bagId, slotIndex)
     if itemType == nil then return nil, "type api missing" end
-    if IsGlyph(itemType) then return "glyphs", nil end
+    if IsGlyph(itemType) or IsEnchantingRune(itemType) then return "glyphs", nil end
     if ITEMTYPE_WEAPON ~= nil and itemType == ITEMTYPE_WEAPON then return "weapons", nil end
     if ITEMTYPE_ARMOR ~= nil and itemType == ITEMTYPE_ARMOR then
         if IsJewelry(bagId, slotIndex) then
@@ -342,14 +348,16 @@ local function AddCandidateIfSafe(bagId, slotIndex, stats)
         end
     end
 
-    local crafted, craftedReason = IsPlayerCrafted(bagId, slotIndex)
-    if craftedReason then
-        AddCount(stats.skipped, craftedReason)
-        return
-    end
-    if crafted == true then
-        AddCount(stats.skipped, "player crafted")
-        return
+    if category ~= "glyphs" then
+        local crafted, craftedReason = IsPlayerCrafted(bagId, slotIndex)
+        if craftedReason then
+            AddCount(stats.skipped, craftedReason)
+            return
+        end
+        if crafted == true then
+            AddCount(stats.skipped, "player crafted")
+            return
+        end
     end
 
     local canDeconstruct, deconstructReason = IsDeconstructable(bagId, slotIndex, stats.craftingTypes)

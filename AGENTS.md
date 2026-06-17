@@ -54,6 +54,22 @@ Antes de commit, ejecutar:
 - Usar IDs `EZOA_*`.
 - Cada clave debe existir en ambos idiomas.
 
+## Visibilidad HUD/UI
+
+Si en algun momento se anade un control visual propio del addon como HUD, overlay, indicador, alerta flotante, barra, icono movible o elemento persistente en pantalla:
+
+- No dejarlo como `TopLevelWindow` suelta visible en todas las escenas.
+- Registrarlo como fragmento de escena con `ZO_SimpleSceneFragment:New(control)` o `ZO_HUDFadeSceneFragment` si procede.
+- Anadir el fragmento solo a `HUD_SCENE` y `HUD_UI_SCENE`.
+- Mantener un guard central de contexto: solo permitir mostrar controles si la escena actual es `hud` o `hudui`.
+- Si la escena actual no es `hud` ni `hudui`, cualquier `RefreshVisibility`, `Refresh` o `Update` debe hacer `SetHidden(true)` y no volver a mostrar el control.
+- Registrar `SCENE_MANAGER:RegisterCallback("SceneStateChanged", ...)` para refrescar visibilidad de todos los modulos visuales al cambiar de escena.
+- No resolverlo con una lista negativa de escenas como Tribute, Champion Points, inventario, mapas o crafting. La regla correcta es whitelist: visible solo en HUD/HUD_UI.
+- Si hay modo mover/desbloquear, mostrar previsualizacion solo en HUD/HUD_UI.
+- No tocar input, keybinds, navegacion ni vanilla UI salvo opcion explicita y verificada.
+- Mantener textos localizados EN/ES y no hardcodear textos visibles.
+- Antes de usar APIs nuevas de ESO, verificar en UESP ESO Data: https://esodata.uesp.net/current/index.html
+
 ## Automatizaciones
 
 Las casillas LAM guardan preferencias. Las acciones reales deben implementarse una por una, solo cuando la ruta de API de ESO este confirmada.

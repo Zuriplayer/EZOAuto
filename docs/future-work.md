@@ -48,17 +48,64 @@ Pendiente:
 
 ## Finder de grupo
 
-Idea nueva pendiente de analisis: aceptar automaticamente las confirmaciones del finder cuando el jugador entra en una actividad de grupo, incluyendo dungeon, trial y Battleground si ESO lo expone por la misma ruta o por rutas equivalentes.
+Estado actual: EZOAuto acepta automaticamente confirmaciones LFG del Activity Finder si el usuario activa la casilla concreta y ESO informa un `LFG_ACTIVITY_*` compatible.
 
-Antes de implementar hay que confirmar:
+Implementado:
 
-- Que existe una API o evento real y seguro para detectar la confirmacion del finder.
-- Que la accion de aceptar puede ejecutarse desde addon sin interceptar input global ni simular teclas.
-- Que se distingue claramente una confirmacion del finder de otros dialogos del juego.
-- Que se puede limitar a contextos configurados por el usuario: dungeon, trial, Battleground u otros.
-- Que no acepta ready checks, invitaciones, colas o dialogos no relacionados.
-- Que funciona igual en teclado y gamepad, o que se bloquea de forma conservadora donde no este verificado.
-- Que se protege contra ejecuciones repetidas y estados incompletos.
-- Que la opcion queda desactivada por defecto y con texto claro en LAM.
+- Mazmorras normales.
+- Mazmorras veteranas.
+- Battlegrounds.
+- Tales of Tribute casual.
+- Tales of Tribute competitivo.
+- Trials.
+- Arenas.
+- Archivo infinito.
+- Visitas de casas.
+- Exploracion.
+- Aviso sonoro repetido mientras hay un ready check LFG pendiente, con intervalo configurable.
+- Tamer local del aviso sonoro: un unico bucle activo, sin reabrir dialogos ni tocar `PLAYER_TO_PLAYER`.
 
-No implementar hasta revisar ESOUI, addons actualizados y documentacion de UESP/ESO API. Si la unica ruta posible exige tocar input, keybindings, dialogos globales no especificos o aceptar dialogos ambiguos, la funcion debe descartarse o quedar solo documentada.
+Referencias revisadas:
+
+- AutoReadyCheck 2.4.1 en ESOUI. Usa `EVENT_ACTIVITY_FINDER_STATUS_UPDATE`, `ACTIVITY_FINDER_STATUS_READY_CHECK`, `GetLFGReadyCheckActivityType()` y `AcceptLFGReadyCheckNotification()`.
+- Bandits User Interface. Usa `EVENT_ACTIVITY_FINDER_STATUS_UPDATE` y `AcceptLFGReadyCheckNotification()` con retardo.
+- LFG Auto Accept. Historico y popular, pero antiguo; util como precedente, no como patron principal.
+- Group & Activity Finder Extensions 6.2.0. Su modulo `queue-extensions.lua` repite `SOUNDS.LFG_SEARCH_FINISHED` cada 2 segundos mientras `GetActivityFinderStatus()` sigue en `ACTIVITY_FINDER_STATUS_READY_CHECK` y `HasAcceptedLFGReadyCheck()` sigue falso.
+- IsJusta Ready Check Tamer 2.1. Controla prompts temporizados con `PLAYER_TO_PLAYER:AddPromptToIncomingQueue`; se descarta copiarlo tal cual porque afecta dialogos vanilla mas alla del Activity Finder.
+
+Decision para EZOAuto:
+
+- No se aceptan ready checks genericos de grupo.
+- No se aceptan votaciones, invitaciones ni expulsiones.
+- No se crean keybinds, overlays, comandos ni ventanas.
+- No se hookea `PLAYER_TO_PLAYER` ni se silencian prompts globales.
+- Todas las opciones quedan desactivadas por defecto.
+
+Pendiente:
+
+- Probar cada actividad en teclado y gamepad.
+- Confirmar si "Group Finder" moderno de grupos personalizados emite `LFG_ACTIVITY_EXPLORATION`, `LFG_ACTIVITY_TRIAL`, `LFG_ACTIVITY_ARENA` u otro tipo diferente.
+- Probar si el sonido elegido por ESO (`SOUNDS.LFG_SEARCH_FINISHED` con fallback `SOUNDS.LFG_READY_CHECK`) es el mas claro en combate.
+
+## Automatizaciones de entorno
+
+Implementado:
+
+- Ocultar mascota cosmetica al entrar en zonas conocidas de trial mediante `GetZoneId(GetUnitZoneIndex("player"))`, `GetActiveCollectibleByType(COLLECTIBLE_CATEGORY_TYPE_VANITY_PET)` y `UseCollectible`.
+- Cerrar libros automaticamente con `EVENT_SHOW_BOOK` y `SCENE_MANAGER:ShowBaseScene()`, dejando abrir el mismo interactuable en el segundo intento.
+
+Referencias revisadas:
+
+- Bandits User Interface. Oculta mascota en lobbies/trials con lista de zonas y `UseCollectible`; cierra libros con `EVENT_SHOW_BOOK`.
+- CrutchAlerts. Confirma IDs de trials modernos: Lucent Citadel `1478` y Ossein Cage `1548`.
+
+Decision para EZOAuto:
+
+- No se reactivan mascotas al salir del trial.
+- No se tocan asistentes, companeros ni mascotas de combate.
+- Auto-cerrar libros queda como casilla desactivada por defecto.
+
+Pendiente:
+
+- Probar la retirada de mascota en trial real y confirmar si debe ampliarse a arenas.
+- Probar libros/lorebooks/estanterias en teclado y gamepad.
