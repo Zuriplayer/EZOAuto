@@ -5,7 +5,7 @@
 *.json text eol=lf
 *.yml text eol=lf
 *.yaml text eol=lf
-*.ps1 text eol=lf
+*.ps1 text eol=lf linguist-vendored
 LICENSE text eol=lf
 .gitattributes text eol=lf
 .gitignore text eol=lf
