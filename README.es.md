@@ -19,6 +19,13 @@ El addon mantiene un alcance reducido a propósito:
 
 EZOAuto está actualmente en beta. Las funciones son opcionales y reversibles, pero conviene probarlas con tu propia configuración, especialmente si usas otros addons de interfaz o inventario.
 
+## Metadatos de versión
+
+- Versión del addon: `0.1.17`
+- AddOnVersion: `10017`
+- APIVersion: `101049 101050`
+- Estado: beta
+
 ## Requisitos
 
 - The Elder Scrolls Online
