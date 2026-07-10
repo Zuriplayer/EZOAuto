@@ -27,11 +27,16 @@ local function GetCurrentBookKey()
     return nil
 end
 
-local function OnShowBook(_, inBook)
-    if not IsEnabled() then return end
-    if inBook == false then return end
+local function GetBookKey(title, bookId)
+    if bookId ~= nil and bookId ~= 0 then return tostring(bookId) end
+    if title and title ~= "" then return tostring(title) end
+    return GetCurrentBookKey()
+end
 
-    local bookKey = GetCurrentBookKey()
+local function OnShowBook(_, title, body, medium, showTitle, bookId)
+    if not IsEnabled() then return end
+
+    local bookKey = GetBookKey(title, bookId)
     if bookKey and lastClosedBookKey == bookKey then
         lastClosedBookKey = nil
         return

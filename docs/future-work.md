@@ -18,7 +18,7 @@ Este archivo recoge ideas que no deben implementarse hasta confirmar APIs reales
 
 ## Deconstruccion segura
 
-Estado actual: EZOAuto puede previsualizar candidatos y preparar la cola de deconstruccion usando la interfaz de ESO. No pulsa el boton final ni destruye objetos automaticamente.
+Estado actual: EZOAuto puede previsualizar candidatos y preparar la cola de deconstruccion usando la interfaz de ESO. No pulsa el boton final ni destruye objetos automaticamente; la confirmacion final queda siempre en manos del usuario.
 
 Validado:
 
@@ -26,11 +26,12 @@ Validado:
 - Estaciones normales: herreria, ropa, carpinteria, joyeria y encantamiento.
 - Teclado y gamepad.
 - Ruta actual de deconstruccion segura sin confirmacion final.
+- Banco y banco ESO Plus sin anomalias observadas en la ruta actual.
 
-Pendiente:
+Decision:
 
-- Confirmar la ruta segura para detectar asistente de deconstruccion si se quiere cubrir de forma explicita.
-- Decidir si queda permanentemente como "preparar cola" o si alguna vez se analiza una confirmacion final. Por defecto, no automatizar la confirmacion final.
+- Mantener el comportamiento actual: preparar la lista y dejar que el usuario ejecute la deconstruccion.
+- No tratar el asistente de deconstruccion de forma especial salvo que aparezca una anomalia concreta.
 
 ## Chat de grupo
 
@@ -42,9 +43,9 @@ Validado:
 - `/reloadui` estando ya en grupo.
 - No abre la caja de chat ni envia mensajes.
 
-Pendiente:
+Decision:
 
-- Revisar si conviene restaurar el canal anterior al salir del grupo. No implementado por decision expresa pendiente.
+- Sin pendiente activo. Se mantiene el comportamiento actual: no restaurar automaticamente el canal anterior al salir del grupo.
 
 ## Finder de grupo
 
@@ -81,9 +82,9 @@ Decision para EZOAuto:
 - No se hookea `PLAYER_TO_PLAYER` ni se silencian prompts globales.
 - Todas las opciones quedan desactivadas por defecto.
 
-Pendiente:
+Estado de pruebas:
 
-- Probar cada actividad en teclado y gamepad.
+- Funcionamiento general correcto en pruebas. Quedan tipos concretos por probar individualmente en teclado y gamepad.
 - Confirmar si "Group Finder" moderno de grupos personalizados emite `LFG_ACTIVITY_EXPLORATION`, `LFG_ACTIVITY_TRIAL`, `LFG_ACTIVITY_ARENA` u otro tipo diferente.
 - Probar si el sonido elegido por ESO (`SOUNDS.LFG_SEARCH_FINISHED` con fallback `SOUNDS.LFG_READY_CHECK`) es el mas claro en combate.
 
@@ -104,8 +105,9 @@ Decision para EZOAuto:
 - No se reactivan mascotas al salir del trial.
 - No se tocan asistentes, companeros ni mascotas de combate.
 - Auto-cerrar libros queda como casilla desactivada por defecto.
+- No ampliar de momento la retirada de mascota a arenas.
 
-Pendiente:
+Estado de pruebas:
 
-- Probar la retirada de mascota en trial real y confirmar si debe ampliarse a arenas.
-- Probar libros/lorebooks/estanterias en teclado y gamepad.
+- Retirada de mascota en trial: parece funcionar; se deja como esta.
+- Libros/lorebooks/estanterias: parece funcionar.

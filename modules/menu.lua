@@ -294,6 +294,20 @@ local function GetOptions()
             default = false,
             width   = "full",
         },
+        {
+            type    = "checkbox",
+            name    = GetString(EZOA_OPTION_SHOW_GROUP_HEALTHBARS_HEALER),
+            tooltip = GetString(EZOA_OPTION_SHOW_GROUP_HEALTHBARS_HEALER_TOOLTIP),
+            getFunc = function() return EZOA.sv.automation.showGroupHealthbarsAsHealer == true end,
+            setFunc = function(value)
+                EZOA.sv.automation.showGroupHealthbarsAsHealer = value == true
+                if EZOAuto_Nameplates and EZOAuto_Nameplates.Refresh then
+                    EZOAuto_Nameplates.Refresh("settings changed")
+                end
+            end,
+            default = false,
+            width   = "full",
+        },
         { type = "header", name = GetString(EZOA_OPTION_DECONSTRUCTION) },
         { type = "description", text = GetString(EZOA_OPTION_DECONSTRUCTION_NOTE), width = "full" },
         {

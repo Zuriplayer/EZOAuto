@@ -86,6 +86,7 @@ function EZOA:Initialize()
             deconstructGlyphs = true,
             hideGroupNameplatesInGroup = false,
             hideGroupNameplatesInCombat = false,
+            showGroupHealthbarsAsHealer = false,
         },
         nameplates = {
             groupMemberNameplatesManaged = false,

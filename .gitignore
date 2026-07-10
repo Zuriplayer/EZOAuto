@@ -5,3 +5,34 @@ SavedVariables/
 Thumbs.db
 .DS_Store
 dist/
+
+# Local assistant/editor state
+.codex/
+.agents/
+.cursor/
+.zed/
+.roo/
+.aider*
+
+# Local/private configuration
+.env
+.env.*
+*.local
+*.local.*
+*.secret
+*.secret.*
+secrets.*
+AGENTS.local.md
+AGENTS.md
+CLAUDE.local.md
+GEMINI.local.md
+
+# Local notes and scratch files
+local/
+private/
+scratch/
+tmp/
+temp/
+*.tmp
+*.bak
+*.orig

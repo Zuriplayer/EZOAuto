@@ -7,6 +7,9 @@ local EZOA = EZOAuto
 local EVENT_PREFIX = "EZOAuto_Nameplates"
 local REFRESH_DELAY_MS = 300
 
+local GetHiddenNameplateChoice
+local GetHealerHealthbarChoice
+
 local function DebugLog(message)
     if EZOA and type(EZOA.DebugLog) == "function" then
         EZOA.DebugLog(message)
@@ -45,11 +48,19 @@ local function IsApiReady()
         and type(SetSetting) == "function"
         and SETTING_TYPE_NAMEPLATES ~= nil
         and NAMEPLATE_TYPE_GROUP_MEMBER_NAMEPLATES ~= nil
-        and NAMEPLATE_CHOICE_NEVER ~= nil
+        and GetHiddenNameplateChoice() ~= nil
 end
 
 local function IsHealthbarApiReady()
     return NAMEPLATE_TYPE_GROUP_MEMBER_HEALTHBARS ~= nil
+end
+
+function GetHiddenNameplateChoice()
+    return NAMEPLATE_CHOICE_NEVER or NAMEPLATE_CHOICE_OFF
+end
+
+function GetHealerHealthbarChoice()
+    return NAMEPLATE_CHOICE_INJURED or NAMEPLATE_CHOICE_ON or NAMEPLATE_CHOICE_ALWAYS or NAMEPLATE_CHOICE_ALL
 end
 
 local function IsPvEWorld()
@@ -70,12 +81,29 @@ local function IsPvEWorld()
     return checked
 end
 
+local function IsHealerRole()
+    if type(GetSelectedLFGRole) ~= "function" or LFG_ROLE_HEAL == nil then
+        return false
+    end
+
+    local ok, role = pcall(GetSelectedLFGRole)
+    return ok and role == LFG_ROLE_HEAL
+end
+
 local function ShouldHideGroupIndicators()
     local automation = GetAutomation()
     if not automation or not IsGrouped() then return false end
     if not IsPvEWorld() then return false end
     if automation.hideGroupNameplatesInGroup == true then return true end
     return automation.hideGroupNameplatesInCombat == true and IsInCombat()
+end
+
+local function ShouldForceGroupHealthbars()
+    local automation = GetAutomation()
+    if not automation or automation.showGroupHealthbarsAsHealer ~= true then return false end
+    if not IsGrouped() then return false end
+    if not IsPvEWorld() then return false end
+    return IsHealerRole()
 end
 
 function NAMEPLATES.NormalizeSettings()
@@ -96,6 +124,8 @@ end
 
 local function HideManagedSetting(state, managedKey, originalKey, settingKey)
     if settingKey == nil then return false end
+    local hiddenChoice = GetHiddenNameplateChoice()
+    if hiddenChoice == nil then return false end
 
     local changed = false
     if state[managedKey] ~= true then
@@ -104,7 +134,21 @@ local function HideManagedSetting(state, managedKey, originalKey, settingKey)
         changed = true
     end
 
-    SetNameplateSetting(settingKey, NAMEPLATE_CHOICE_NEVER)
+    SetNameplateSetting(settingKey, hiddenChoice)
+    return changed
+end
+
+local function ForceManagedSetting(state, managedKey, originalKey, settingKey, value)
+    if settingKey == nil or value == nil then return false end
+
+    local changed = false
+    if state[managedKey] ~= true then
+        state[originalKey] = GetCurrentSetting(settingKey)
+        state[managedKey] = true
+        changed = true
+    end
+
+    SetNameplateSetting(settingKey, value)
     return changed
 end
 
@@ -121,16 +165,29 @@ local function RestoreManagedSetting(state, managedKey, originalKey, settingKey)
     return true
 end
 
-local function ApplyManagedPair(reason, shouldHide, nameplateType, healthbarType, nameManagedKey, nameOriginalKey, healthManagedKey, healthOriginalKey, label)
+local function ApplyManagedPair(reason, shouldHide, forceHealthbar, nameplateType, healthbarType, nameManagedKey, nameOriginalKey, healthManagedKey, healthOriginalKey, label)
     local state = GetState()
     if not state then return end
     local changed = false
 
     if shouldHide then
         changed = HideManagedSetting(state, nameManagedKey, nameOriginalKey, nameplateType) or changed
-        changed = HideManagedSetting(state, healthManagedKey, healthOriginalKey, healthbarType) or changed
+        if forceHealthbar then
+            changed = ForceManagedSetting(state, healthManagedKey, healthOriginalKey, healthbarType, GetHealerHealthbarChoice()) or changed
+        else
+            changed = HideManagedSetting(state, healthManagedKey, healthOriginalKey, healthbarType) or changed
+        end
         if changed then
             DebugLog(label .. " hidden: " .. tostring(reason) .. ".")
+        end
+        return
+    end
+
+    if forceHealthbar then
+        changed = RestoreManagedSetting(state, nameManagedKey, nameOriginalKey, nameplateType) or changed
+        changed = ForceManagedSetting(state, healthManagedKey, healthOriginalKey, healthbarType, GetHealerHealthbarChoice()) or changed
+        if changed then
+            DebugLog(label .. " health bars shown: " .. tostring(reason) .. ".")
         end
         return
     end
@@ -143,7 +200,7 @@ local function ApplyManagedPair(reason, shouldHide, nameplateType, healthbarType
 end
 
 local function ApplyGroupIndicators(reason)
-    ApplyManagedPair(reason, ShouldHideGroupIndicators(),
+    ApplyManagedPair(reason, ShouldHideGroupIndicators(), ShouldForceGroupHealthbars(),
         NAMEPLATE_TYPE_GROUP_MEMBER_NAMEPLATES,
         IsHealthbarApiReady() and NAMEPLATE_TYPE_GROUP_MEMBER_HEALTHBARS or nil,
         "groupMemberNameplatesManaged",
@@ -213,6 +270,9 @@ function NAMEPLATES.Init()
     EVENT_MANAGER:RegisterForEvent(EVENT_PREFIX, EVENT_GROUP_MEMBER_JOINED, OnGroupChanged)
     EVENT_MANAGER:RegisterForEvent(EVENT_PREFIX, EVENT_GROUP_MEMBER_LEFT, OnGroupChanged)
     EVENT_MANAGER:RegisterForEvent(EVENT_PREFIX, EVENT_GROUP_UPDATE, OnGroupChanged)
+    if EVENT_GROUP_MEMBER_ROLES_CHANGED ~= nil then
+        EVENT_MANAGER:RegisterForEvent(EVENT_PREFIX .. "_Roles", EVENT_GROUP_MEMBER_ROLES_CHANGED, OnGroupChanged)
+    end
     EVENT_MANAGER:RegisterForEvent(EVENT_PREFIX, EVENT_PLAYER_COMBAT_STATE, OnCombatStateChanged)
     EVENT_MANAGER:RegisterForEvent(EVENT_PREFIX, EVENT_PLAYER_ACTIVATED, OnPlayerActivated)
     RefreshSoon("addon loaded")

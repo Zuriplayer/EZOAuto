@@ -1,8 +1,6 @@
 # Deconstruccion automatica
 
-Estado: fase 2 en preparacion. EZOAuto puede hacer una vista previa en Debug Viewer y tambien dejar candidatos seguros en la lista de deconstruccion de ESO. Todavia no pulsa el boton final ni destruye objetos por su cuenta.
-
-Primero hay que probar bien las ventas de mercader. Esta funcion destruye objetos, asi que no debe entrar en el addon hasta tener confirmada la ruta de APIs de ESO y unas pruebas claras en teclado y gamepad.
+Estado: implementado como preparacion de cola. EZOAuto puede hacer una vista previa en Debug Viewer y tambien dejar candidatos seguros en la lista de deconstruccion de ESO. No pulsa el boton final ni destruye objetos por su cuenta; esa confirmacion queda siempre en manos del usuario.
 
 ## Referencia revisada
 
@@ -14,7 +12,6 @@ Ideas utiles de DeconstructAll:
 - No deconstruye directamente al abrir; anade objetos a la lista de deconstruccion de la propia interfaz de ESO.
 - Evita objetos legendarios.
 - Evita objetos ornamentados.
-- Respeta FCO ItemSaver si esta presente.
 - En deconstructor universal respeta el filtro activo, para no mezclar categorias.
 - Permite incluir objetos del inventario del personaje y tambien objetos del banco.
 - Tiene codigo separado para teclado y gamepad.
@@ -34,11 +31,11 @@ Nombre provisional:
 - Espanol: Deconstruir objetos seguros en deconstructor
 - Ingles: Deconstruct safe items at deconstructors
 
-La accion se ejecutaria solo al abrir un deconstructor valido, incluyendo el asistente de deconstruccion si la API lo permite de forma limpia.
+La accion se ejecuta solo al abrir una ruta de deconstruccion/extraccion valida. El asistente de deconstruccion queda sin tratamiento especial salvo que aparezca una anomalia concreta.
 
 Condiciones minimas para aceptar un objeto:
 
-- No fabricado por un jugador. API pendiente de confirmar antes de implementar.
+- No fabricado por un jugador, salvo glifos/runas en encantamiento, donde crear glifos basicos para extraer es una ruta de uso esperada.
 - No bloqueado por el jugador.
 - No protegido por sistemas conocidos del juego.
 - Calidad inferior a legendaria.
@@ -49,7 +46,7 @@ Condiciones minimas para aceptar un objeto:
 - Debe pertenecer a una categoria activada por el usuario.
 - Debe estar en una ubicacion activada por el usuario: inventario del personaje o banco.
 
-La parte de banco queda marcada como investigacion obligatoria. DeconstructAll lo permite, pero antes de programarlo en EZOAuto hay que confirmar si la ruta de ESO distingue bien mochila, banco y banco de ESO Plus, y si el asistente de deconstruccion puede acceder a banco igual que una estacion normal.
+El banco y banco ESO Plus no han mostrado anomalias en la ruta actual. Si aparece una diferencia entre estacion normal y asistente, se documentara como caso concreto.
 
 ## Selectores posibles
 
@@ -63,10 +60,10 @@ No conviene una unica casilla gigante. Mejor una casilla maestra y selectores po
 - Joyeria.
 - Glifos/runas.
 
-Opciones que quedan para mas adelante:
+Opciones descartadas:
 
-- Incluir objetos intrincados aunque no sean de la familia marcada.
-- Respetar FCO ItemSaver si esta cargado, sin convertirlo en dependencia obligatoria.
+- Incluir objetos intrincados con una regla especial.
+- Integracion con FCO ItemSaver.
 
 ## Ruta tecnica propuesta
 
@@ -94,15 +91,11 @@ Fase 3: accion real.
 
 Implementado inicialmente como preparacion de cola: se llama a `AddItemToCraft(bagId, slotIndex)` sobre el control de ESO que ya esta abierto. En deconstructor universal se respeta el filtro activo con `ZO_UniversalDeconstructionPanel_Shared.DoesItemPassFilter`, igual que la referencia revisada. Queda fuera, a proposito, pulsar el boton final de deconstruccion.
 
-## Pendientes antes de programar
+## Decisiones y seguimiento
 
-- Confirmar la API correcta para saber si un objeto fue fabricado por un jugador.
-- Confirmar la API segura para detectar el asistente de deconstruccion.
-- Confirmar la forma correcta de anadir objetos a la lista de deconstruccion sin interferir con filtros.
-- Confirmar como maneja ESO los objetos del banco en deconstruccion y si hay diferencias entre estacion normal y asistente.
-- Confirmar si banco de cuenta, banco de ESO Plus o banco de casas aparecen como bolsas distintas o solo como parte del filtro de deconstruccion.
-- Decidir si la accion solo selecciona objetos o tambien confirma la deconstruccion.
-- Decidir si se respeta FCO ItemSaver solo si esta cargado.
+- Mantener el alcance actual: seleccionar/preparar candidatos seguros, sin confirmar la deconstruccion.
+- Mantener el asistente de deconstruccion sin logica diferenciada mientras no haya una anomalia reproducible.
+- Banco y banco ESO Plus quedan aceptados en la ruta actual al no haberse observado anomalias.
 
 Fuentes:
 
