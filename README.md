@@ -5,6 +5,7 @@ EZOAuto is a small beta addon for **The Elder Scrolls Online** that adds optiona
 Prefer Spanish? Read the [Spanish README](README.es.md).
 
 Support, feedback, bug reports and suggestions: https://discord.gg/zUdnynaQPw
+
 The addon is intentionally narrow in scope:
 
 - one LibAddonMenu settings panel;
