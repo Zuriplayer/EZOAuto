@@ -2,8 +2,7 @@
 
 EZOAuto is a small beta addon for **The Elder Scrolls Online** that adds optional, conservative automations for common UI chores.
 
-Prefer Spanish? Read the [Spanish README](README.es.md).
-
+¿Prefieres español? Lee el [README en español](README.es.md).
 Support, feedback, bug reports and suggestions: https://discord.gg/zUdnynaQPw
 
 The addon is intentionally narrow in scope:
