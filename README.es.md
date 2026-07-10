@@ -4,7 +4,7 @@ EZOAuto es un addon beta pequeño para **The Elder Scrolls Online** que añade a
 
 ¿Prefieres inglés? Lee el [README en inglés](README.md).
 
-Soporte, comentarios, informes de errores y sugerencias: https://discord.gg/ekw8zUAcRm
+Soporte, comentarios, informes de errores y sugerencias: https://discord.gg/zUdnynaQPw
 
 El addon mantiene un alcance reducido a propósito:
 
