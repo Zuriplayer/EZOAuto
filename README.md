@@ -2,6 +2,10 @@
 
 EZOAuto is a small beta addon for **The Elder Scrolls Online** that adds optional, conservative automations for common UI chores.
 
+Prefer Spanish? Read the [Spanish README](README.es.md).
+
+Support, feedback, bug reports and suggestions: https://discord.gg/ekw8zUAcRm
+
 The addon is intentionally narrow in scope:
 
 - one LibAddonMenu settings panel;
@@ -27,33 +31,55 @@ Optional:
 
 ## Features
 
+All automations are disabled by default and can be enabled independently. Settings are stored per character.
+
 ### Merchant Automation
 
-- Repair equipped gear.
-- Sell ornate items when configured.
+- Sell non-stolen Ornate equipment, Treasure items, and Trash items through independent options.
+- Repair equipped gear only, or equipped gear plus repairable gear in the backpack.
+- Skip combat, fences, stolen items, locked or protected items, Armory items, companion items, and items without vendor value.
+
+### Group Chat
+
+- Optionally switch the active chat channel to group when joining a group.
+- Also applies after `/reloadui` when the character is already grouped.
+- Does not open the chat box, send a message, or restore the previous channel when leaving the group.
 
 ### Safe Deconstruction
 
-EZOAuto can preview safe deconstruction candidates and prepare ESO's own deconstruction list.
+EZOAuto can preview safe deconstruction candidates in Debug Viewer and prepare ESO's own deconstruction list at the universal deconstructor and normal blacksmithing, clothing, woodworking, jewelry, and enchanting stations.
+
+- Choose inventory and, when exposed by ESO, bank and ESO Plus bank sources.
+- Choose weapons, armor, jewelry, and glyphs/runes independently.
+- Reject stolen, locked, protected, Legendary, Ornate, companion, and non-deconstructable items.
+- Reject player-crafted equipment; crafted glyphs remain eligible for the normal extraction workflow.
+- Respect the active category filter at the universal deconstructor.
 
 It **does not press the final deconstruction confirmation** and does not destroy items by itself. The final destructive action stays manual.
 
 ### Activity Finder
 
-- Optional auto-accept for selected Activity Finder ready checks.
-- Optional repeated sound while an Activity Finder ready check is pending.
+- Independent auto-accept options for normal dungeons, veteran dungeons, Battlegrounds, casual and competitive Tales of Tribute, trials, arenas, Endless Archive, Home Tours, and Exploration when ESO exposes the matching activity type.
+- Optional repeated sound while an Activity Finder ready check is pending, with a configurable delay from 2 to 15 seconds.
+- A single local sound loop avoids duplicate alerts without modifying or reopening ESO dialogs.
 - No generic group ready checks, votes, invitations, or kick prompts are accepted.
 
 ### Group Visibility
 
-- Optional PvE-only management of ESO's native group member nameplates and health bars.
-- Optional healer role behavior that can show injured group member health bars using ESO's native health bar setting.
+- Optionally hide ESO's native group member names and health bars while grouped, or only during combat.
+- Optional healer role behavior that shows injured group member health bars in PvE even when the combat hiding option is active.
+- Managed native values are restored when the condition ends or the option is disabled; PvP areas are left alone.
 - No custom HUD or overlay is created.
 
 ### Environment Automation
 
 - Optional vanity pet dismiss in known trial zones.
 - Optional auto-close books, with a second opening of the same book left open so it can be read.
+
+### Language And Diagnostics
+
+- Automatic client-language selection, or forced English/Spanish addon text.
+- Optional technical logging through LibDebugLogger and DebugLogViewer; normal chat is kept for functional messages.
 
 ## Safety Boundaries
 
@@ -65,6 +91,8 @@ EZOAuto avoids broad automation and does not:
 - accept PvP, vote, kick, or social prompts;
 - confirm destructive deconstruction actions;
 - sell or repair outside the configured cases.
+
+Every automation is opt-in and can be disabled independently from LibAddonMenu.
 
 ## Installation
 
@@ -87,3 +115,7 @@ Before relying on a feature, test it in your own setup:
 ## Development Notes
 
 This repository intentionally keeps the addon small and focused. New automation should be backed by verified ESO APIs and should stay opt-in from the settings panel.
+
+## License
+
+MIT. See [LICENSE](LICENSE).
