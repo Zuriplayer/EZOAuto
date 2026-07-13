@@ -25,6 +25,13 @@ local function SetActivityFinderNumberOption(key, value)
     end
 end
 
+local function SetGroupInviteOption(value)
+    EZOAuto.sv.automation.autoAcceptGroupInvites = value == true
+    if EZOAuto_GroupInvites and EZOAuto_GroupInvites.RefreshRegistration then
+        EZOAuto_GroupInvites.RefreshRegistration()
+    end
+end
+
 local function SetPetOption(key, value)
     EZOAuto.sv.automation[key] = value == true
     if EZOAuto_Pets and EZOAuto_Pets.RefreshRegistration then
@@ -142,6 +149,17 @@ local function GetOptions()
             tooltip = GetString(EZOA_OPTION_AUTO_CLOSE_BOOKS_TOOLTIP),
             getFunc = function() return EZOA.sv.automation.autoCloseBooks == true end,
             setFunc = function(value) SetBookOption("autoCloseBooks", value) end,
+            default = false,
+            width   = "full",
+        },
+        { type = "header", name = GetString(EZOA_OPTION_GROUP_INVITATIONS) },
+        { type = "description", text = GetString(EZOA_OPTION_GROUP_INVITATIONS_NOTE), width = "full" },
+        {
+            type    = "checkbox",
+            name    = GetString(EZOA_OPTION_AUTO_ACCEPT_GROUP_INVITES),
+            tooltip = GetString(EZOA_OPTION_AUTO_ACCEPT_GROUP_INVITES_TOOLTIP),
+            getFunc = function() return EZOA.sv.automation.autoAcceptGroupInvites == true end,
+            setFunc = SetGroupInviteOption,
             default = false,
             width   = "full",
         },

@@ -20,8 +20,8 @@ EZOAuto is currently in beta. Features are designed to be opt-in and reversible,
 
 ## Version Metadata
 
-- Addon version: `0.1.17`
-- AddOnVersion: `10017`
+- Addon version: `0.1.18`
+- AddOnVersion: `10018`
 - APIVersion: `101049 101050`
 - Status: beta
 
@@ -51,6 +51,12 @@ All automations are disabled by default and can be enabled independently. Settin
 - Also applies after `/reloadui` when the character is already grouped.
 - Does not open the chat box, send a message, or restore the previous channel when leaving the group.
 
+### Group Invitations
+
+- Optionally accept ordinary invitations to join a player group from any player.
+- Revalidate that the same invitation is still pending before accepting it.
+- This option is separate from Activity Finder and does not accept group ready checks, duel, trade, Tales of Tribute, vote, or kick prompts.
+
 ### Safe Deconstruction
 
 EZOAuto can preview safe deconstruction candidates in Debug Viewer and prepare ESO's own deconstruction list at the universal deconstructor and normal blacksmithing, clothing, woodworking, jewelry, and enchanting stations.
@@ -68,7 +74,7 @@ It **does not press the final deconstruction confirmation** and does not destroy
 - Independent auto-accept options for normal dungeons, veteran dungeons, Battlegrounds, casual and competitive Tales of Tribute, trials, arenas, Endless Archive, Home Tours, and Exploration when ESO exposes the matching activity type.
 - Optional repeated sound while an Activity Finder ready check is pending, with a configurable delay from 2 to 15 seconds.
 - A single local sound loop avoids duplicate alerts without modifying or reopening ESO dialogs.
-- No generic group ready checks, votes, invitations, or kick prompts are accepted.
+- The Activity Finder options do not accept generic group ready checks, votes, ordinary group invitations, or kick prompts.
 
 ### Group Visibility
 
@@ -94,7 +100,8 @@ EZOAuto avoids broad automation and does not:
 - create keybindings;
 - intercept input;
 - add a side menu or persistent overlay;
-- accept PvP, vote, kick, or social prompts;
+- accept duel, trade, Tales of Tribute, vote, kick, or other social prompts;
+- accept ordinary group invitations unless their separate option is enabled;
 - confirm destructive deconstruction actions;
 - sell or repair outside the configured cases.
 
@@ -116,6 +123,8 @@ Before relying on a feature, test it in your own setup:
 - settings panel opens correctly;
 - language setting persists;
 - checkboxes persist;
+- ordinary group invitations remain manual when disabled and are accepted when enabled;
+- duel, trade, Tales of Tribute, vote, kick, and group ready-check prompts remain untouched;
 - keyboard and gamepad modes remain usable.
 
 ## Development Notes

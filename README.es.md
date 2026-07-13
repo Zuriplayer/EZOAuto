@@ -20,8 +20,8 @@ EZOAuto está actualmente en beta. Las funciones son opcionales y reversibles, p
 
 ## Metadatos de versión
 
-- Versión del addon: `0.1.17`
-- AddOnVersion: `10017`
+- Versión del addon: `0.1.18`
+- AddOnVersion: `10018`
 - APIVersion: `101049 101050`
 - Estado: beta
 
@@ -51,6 +51,12 @@ Todas las automatizaciones están desactivadas por defecto, se pueden activar de
 - Aplicarlo también después de `/reloadui` si el personaje ya estaba agrupado.
 - No abre la caja de chat, no envía mensajes y no restaura el canal anterior al salir del grupo.
 
+### Invitaciones de grupo
+
+- Aceptar opcionalmente invitaciones normales de cualquier jugador para unirse a un grupo.
+- Comprobar de nuevo que sigue pendiente la misma invitación antes de aceptarla.
+- Esta opción es independiente del Activity Finder y no acepta ready checks de grupo ni solicitudes de duelo, comercio, Tales of Tribute, votación o expulsión.
+
 ### Deconstrucción segura
 
 EZOAuto puede mostrar en Debug Viewer una vista previa de candidatos seguros y preparar la lista propia de deconstrucción de ESO en el deconstructor universal y en estaciones normales de herrería, sastrería, carpintería, joyería y encantamiento.
@@ -68,7 +74,7 @@ EZOAuto **no pulsa la confirmación final de deconstrucción** y no destruye obj
 - Opciones independientes de aceptación automática para mazmorras normales, mazmorras veteranas, Battlegrounds, Tales of Tribute casual y competitivo, trials, arenas, Archivo infinito, Visitas de casas y Exploración cuando ESO expone el tipo de actividad correspondiente.
 - Sonido repetido opcional mientras hay un ready check del Activity Finder pendiente, con un intervalo configurable entre 2 y 15 segundos.
 - Un único bucle local de sonido evita avisos duplicados sin modificar ni reabrir diálogos de ESO.
-- No acepta ready checks genéricos de grupo, votaciones, invitaciones ni expulsiones.
+- Las opciones del Activity Finder no aceptan ready checks genéricos de grupo, votaciones, invitaciones normales de grupo ni expulsiones.
 
 ### Visibilidad de grupo
 
@@ -94,7 +100,8 @@ EZOAuto evita automatizaciones amplias y no:
 - crea keybindings;
 - intercepta input;
 - añade menú lateral ni overlay persistente;
-- acepta prompts PvP, votaciones, expulsiones o prompts sociales;
+- acepta solicitudes de duelo, comercio, Tales of Tribute, votación, expulsión u otros prompts sociales;
+- acepta invitaciones normales de grupo salvo que esté habilitada su opción independiente;
 - confirma acciones destructivas de deconstrucción;
 - vende ni repara fuera de los casos configurados.
 
@@ -116,6 +123,8 @@ Antes de depender de una función, pruébala con tu configuración:
 - apertura correcta del panel de ajustes;
 - persistencia del idioma;
 - persistencia de casillas;
+- las invitaciones normales de grupo siguen siendo manuales con la opción desactivada y se aceptan al activarla;
+- las solicitudes de duelo, comercio, Tales of Tribute, votación, expulsión y ready checks de grupo permanecen intactas;
 - teclado y gamepad siguen siendo utilizables.
 
 ## Notas de desarrollo

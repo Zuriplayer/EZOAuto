@@ -1,8 +1,8 @@
 ## Title: E|cB040FFZ|rOAuto
 ## Author: @Zuriplayer
-## Description: Direct optional automations for common merchant chores.
-## Version: 0.1.17
-## AddOnVersion: 10017
+## Description: Optional automations for merchants, groups, Activity Finder, and safe deconstruction.
+## Version: 0.1.18
+## AddOnVersion: 10018
 ## APIVersion: 101049 101050
 ## DependsOn: LibAddonMenu-2.0
 ## OptionalDependsOn: LibChatMessage LibDebugLogger DebugLogViewer
@@ -16,6 +16,7 @@ modules/debug.lua
 modules/core.lua
 modules/merchant.lua
 modules/chat.lua
+modules/group-invites.lua
 modules/activity-finder.lua
 modules/pets.lua
 modules/books.lua

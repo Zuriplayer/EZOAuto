@@ -62,6 +62,7 @@ function EZOA:Initialize()
             repairEquippedAtMerchant = false,
             repairEquippedAndInventoryAtMerchant = false,
             switchToGroupChat = false,
+            autoAcceptGroupInvites = false,
             autoAcceptDungeonFinder = false,
             autoAcceptVeteranDungeonFinder = false,
             autoAcceptBattlegroundFinder = false,
@@ -118,6 +119,10 @@ function EZOA:Initialize()
 
     if EZOAuto_Chat and EZOAuto_Chat.Init then
         EZOAuto_Chat.Init()
+    end
+
+    if EZOAuto_GroupInvites and EZOAuto_GroupInvites.Init then
+        EZOAuto_GroupInvites.Init()
     end
 
     if EZOAuto_ActivityFinder and EZOAuto_ActivityFinder.Init then

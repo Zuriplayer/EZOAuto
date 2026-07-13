@@ -77,7 +77,7 @@ Referencias revisadas:
 Decision para EZOAuto:
 
 - No se aceptan ready checks genericos de grupo.
-- No se aceptan votaciones, invitaciones ni expulsiones.
+- El modulo Activity Finder no acepta votaciones, invitaciones normales de grupo ni expulsiones.
 - No se crean keybinds, overlays, comandos ni ventanas.
 - No se hookea `PLAYER_TO_PLAYER` ni se silencian prompts globales.
 - Todas las opciones quedan desactivadas por defecto.
@@ -87,6 +87,21 @@ Estado de pruebas:
 - Funcionamiento general correcto en pruebas. Quedan tipos concretos por probar individualmente en teclado y gamepad.
 - Confirmar si "Group Finder" moderno de grupos personalizados emite `LFG_ACTIVITY_EXPLORATION`, `LFG_ACTIVITY_TRIAL`, `LFG_ACTIVITY_ARENA` u otro tipo diferente.
 - Probar si el sonido elegido por ESO (`SOUNDS.LFG_SEARCH_FINISHED` con fallback `SOUNDS.LFG_READY_CHECK`) es el mas claro en combate.
+
+## Invitaciones normales de grupo
+
+Estado actual: implementada una casilla independiente y desactivada por defecto para aceptar invitaciones normales de cualquier jugador mediante `EVENT_GROUP_INVITE_RECEIVED`, `GetGroupInviteInfo()` y `AcceptGroupInvite()`.
+
+Limites:
+
+- Se vuelve a comprobar que la misma invitacion sigue pendiente antes de aceptarla.
+- No usa `PLAYER_TO_PLAYER` ni modifica dialogos vanilla.
+- No acepta ready checks de grupo ni solicitudes de duelo, comercio, Tales of Tribute, votacion o expulsion.
+- No forma parte de las opciones del Activity Finder.
+
+Estado de pruebas:
+
+- Pendiente probar una invitacion real en teclado y gamepad, incluida la cancelacion o caducidad durante el retardo corto de aceptacion.
 
 ## Automatizaciones de entorno
 
