@@ -5,7 +5,7 @@
     "name": "EZOAuto",
     "version": "0.1.18",
     "status": "beta",
-    "phase": "beta",
+    "phase": "early-beta",
     "visibility": "public",
     "manifest": "EZOAuto.txt",
     "package": {

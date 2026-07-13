@@ -5,6 +5,7 @@
 - Added an independent opt-in option to accept ordinary player group invitations.
 - Revalidated pending group invitations before acceptance and kept the feature separate from Activity Finder and other social prompts.
 - Updated English and Spanish documentation for the new automation.
+- Marked the public testing phase as early beta.
 
 ## 0.1.17 - Beta
 
