@@ -14,8 +14,13 @@ local function GetLocalizedString(id, fallback)
 end
 
 local function GetLogger()
+    if EZOA._debugLoggerUnavailable == true then
+        return nil
+    end
+
     local lib = _G.LibDebugLogger
     if type(lib) ~= "function" and type(lib) ~= "table" then
+        EZOA._debugLoggerUnavailable = true
         return nil
     end
 
@@ -38,9 +43,11 @@ local function GetLogger()
 
     if ok and logger ~= nil then
         EZOA._debugLogger = logger
+        EZOA._debugLoggerUnavailable = false
         return logger
     end
 
+    EZOA._debugLoggerUnavailable = true
     return nil
 end
 
