@@ -11,6 +11,7 @@ EZOA.LANGUAGE_INHERIT = LANGUAGE_INHERIT
 EZOA.LANGUAGE_AUTO = LANGUAGE_AUTO
 
 local languageCallbackRegistered = false
+local ezocoreRegistered = false
 
 local function Print(message)
     if LibChatMessage then
@@ -102,6 +103,33 @@ function EZOA.RegisterEZOCoreLanguageCallback()
     return languageCallbackRegistered
 end
 
+function EZOA.RegisterWithEZOCore()
+    if ezocoreRegistered
+        or not (EZOCore and type(EZOCore.RegisterAddon) == "function") then
+        return false
+    end
+
+    local ok, result = pcall(function()
+        return EZOCore:RegisterAddon({
+            id = "ezoauto",
+            name = EZOA.ADDON_NAME or ADDON_NAME,
+            version = EZOA.ADDON_VERSION or "0.0.0",
+            addOnVersion = 10021,
+            apiVersion = 1,
+            capabilities = {
+                "automation.activityFinder",
+                "automation.groupInvites",
+                "automation.merchant",
+                "family.language.consumer",
+                "family.settings.consumer",
+            },
+        })
+    end)
+
+    ezocoreRegistered = ok and result == true
+    return ezocoreRegistered
+end
+
 function EZOA:Initialize()
     local world = GetWorldName()
     local defaults = {
@@ -157,6 +185,7 @@ function EZOA:Initialize()
 
     EZOA.ApplyLanguagePreference(self.sv.general.language or EZOA.GetDefaultLanguage())
     EZOA.RegisterEZOCoreLanguageCallback()
+    EZOA.RegisterWithEZOCore()
 
     if self.DebugLog then
         self.DebugLog(GetString(EZOA_DEBUG_SAVED_VARIABLES_LOADED))
