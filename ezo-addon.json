@@ -4,6 +4,7 @@
     "id": "ezoauto",
     "name": "EZOAuto",
     "version": "0.1.20",
+    "stage": "beta",
     "status": "beta",
     "phase": "early-beta",
     "visibility": "public",

@@ -13,8 +13,8 @@ EZOAUTO_STRINGS_ES = {
     EZOA_OPTION_GENERAL = "General",
     EZOA_OPTION_GENERAL_TOOLTIP = "Elige el idioma del addon. Todos los ajustes de automatizacion se guardan por personaje y permanecen independientes.",
     EZOA_OPTION_LANGUAGE = "Idioma",
-    EZOA_OPTION_LANGUAGE_AUTO = "Automatico",
-    EZOA_OPTION_LANGUAGE_TOOLTIP = "Automatico sigue el idioma del cliente ESO. Forzar otro idioma puede mezclar textos del addon con nombres del sistema ESO.",
+    EZOA_OPTION_LANGUAGE_AUTO = "Automatico (cliente ESO)",
+    EZOA_OPTION_LANGUAGE_TOOLTIP = "Idioma local usado cuando EZOCore no esta instalado o su modo de idioma es 'dejar que cada addon elija'. Los idiomas centrales de EZOCore desactivan este selector.",
 
     EZOA_OPTION_MERCHANT_AUTOMATION = "Automatizacion de mercader",
     EZOA_OPTION_MERCHANT_AUTOMATION_TOOLTIP = "Las acciones de mercader seleccionadas se ejecutan automaticamente al abrir una tienda normal. Los objetos robados y la venta en perista no se gestionan.",

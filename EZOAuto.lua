@@ -3,9 +3,14 @@ EZOAuto = EZOAuto or {}
 local EZOA = EZOAuto
 
 local ADDON_NAME = "EZOAuto"
+local LANGUAGE_INHERIT = "inherit"
 local LANGUAGE_AUTO = "auto"
 EZOA.runtime = EZOA.runtime or {}
 EZOA.runtime.debugMode = EZOA.runtime.debugMode == true
+EZOA.LANGUAGE_INHERIT = LANGUAGE_INHERIT
+EZOA.LANGUAGE_AUTO = LANGUAGE_AUTO
+
+local languageCallbackRegistered = false
 
 local function Print(message)
     if LibChatMessage then
@@ -36,7 +41,18 @@ function EZOA.GetClientLanguage()
 end
 
 function EZOA.GetEffectiveLanguage(language)
-    language = tostring(language or LANGUAGE_AUTO)
+    language = tostring(language or EZOA.GetDefaultLanguage())
+    if EZOA.IsLanguageManagedByEZOCore and EZOA.IsLanguageManagedByEZOCore() then
+        local ok, inherited = pcall(function()
+            return EZOCore:GetLanguage()
+        end)
+        if ok and (inherited == "es" or inherited == "en") then
+            return inherited
+        end
+    end
+    if language == LANGUAGE_INHERIT then
+        language = LANGUAGE_AUTO
+    end
     if language == "es" or language == "en" then
         return language
     end
@@ -44,15 +60,53 @@ function EZOA.GetEffectiveLanguage(language)
 end
 
 function EZOA.IsForcedLanguage(language)
-    language = tostring(language or LANGUAGE_AUTO)
+    language = tostring(language or EZOA.GetDefaultLanguage())
+    if EZOA.IsLanguageManagedByEZOCore and EZOA.IsLanguageManagedByEZOCore() then
+        return false
+    end
     return language == "es" or language == "en"
+end
+
+function EZOA.IsLanguageManagedByEZOCore()
+    if not (EZOCore and type(EZOCore.IsLanguageGloballyManaged) == "function") then
+        return false
+    end
+    local ok, managed = pcall(function()
+        return EZOCore:IsLanguageGloballyManaged()
+    end)
+    return ok and managed == true
+end
+
+function EZOA.ApplyLanguagePreference(language)
+    local configuredLanguage = tostring(language or EZOA.GetDefaultLanguage())
+    if EZOAuto_Lang and EZOAuto_Lang.Apply then
+        EZOAuto_Lang.Apply(configuredLanguage)
+    end
+end
+
+function EZOA.RegisterEZOCoreLanguageCallback()
+    if languageCallbackRegistered
+        or not (EZOCore and type(EZOCore.RegisterCallback) == "function") then
+        return false
+    end
+
+    local eventName = EZOCore.EVENT_LANGUAGE_CHANGED or "EZO_CORE_LANGUAGE_CHANGED"
+    local ok, result = pcall(function()
+        return EZOCore:RegisterCallback(eventName, function()
+            if EZOA.sv and EZOA.sv.general then
+                EZOA.ApplyLanguagePreference(EZOA.sv.general.language or EZOA.GetDefaultLanguage())
+            end
+        end)
+    end)
+    languageCallbackRegistered = ok and result == true
+    return languageCallbackRegistered
 end
 
 function EZOA:Initialize()
     local world = GetWorldName()
     local defaults = {
         general = {
-            language = LANGUAGE_AUTO,
+            language = EZOA.GetDefaultLanguage(),
             debugMode = false,
         },
         automation = {
@@ -101,9 +155,8 @@ function EZOA:Initialize()
     self.runtime = self.runtime or {}
     self.runtime.debugMode = self.sv and self.sv.general and self.sv.general.debugMode == true
 
-    if EZOAuto_Lang and EZOAuto_Lang.Apply then
-        EZOAuto_Lang.Apply(self.sv.general.language or LANGUAGE_AUTO)
-    end
+    EZOA.ApplyLanguagePreference(self.sv.general.language or EZOA.GetDefaultLanguage())
+    EZOA.RegisterEZOCoreLanguageCallback()
 
     if self.DebugLog then
         self.DebugLog(GetString(EZOA_DEBUG_SAVED_VARIABLES_LOADED))

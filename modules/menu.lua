@@ -54,18 +54,34 @@ local function GetOptions()
         {
             type          = "dropdown",
             name          = GetString(EZOA_OPTION_LANGUAGE),
-            choices       = { GetString(EZOA_OPTION_LANGUAGE_AUTO), "English", "Español" },
+            choices       = {
+                GetString(EZOA_OPTION_LANGUAGE_AUTO),
+                "English",
+                "Español",
+            },
             choicesValues = { "auto", "en", "es" },
-            getFunc       = function() return EZOA.sv.general.language or "auto" end,
+            getFunc       = function()
+                local value = EZOA.sv.general.language
+                    or (EZOA.GetDefaultLanguage and EZOA.GetDefaultLanguage())
+                    or "auto"
+                if value == "inherit" then value = "auto" end
+                return value
+            end,
             setFunc       = function(value)
-                value = tostring(value or "auto")
+                value = tostring(value or (EZOA.GetDefaultLanguage and EZOA.GetDefaultLanguage()) or "auto")
+                if value == "inherit" then value = "auto" end
                 EZOA.sv.general.language = value
-                if EZOAuto_Lang and EZOAuto_Lang.Apply then
+                if EZOA.ApplyLanguagePreference then
+                    EZOA.ApplyLanguagePreference(value)
+                elseif EZOAuto_Lang and EZOAuto_Lang.Apply then
                     EZOAuto_Lang.Apply(value)
                 end
                 if EZOA.IsForcedLanguage and EZOA.IsForcedLanguage(value) then
                     WarnForcedLanguage()
                 end
+            end,
+            disabled = function()
+                return EZOA.IsLanguageManagedByEZOCore and EZOA.IsLanguageManagedByEZOCore()
             end,
             default = (EZOA.GetDefaultLanguage and EZOA.GetDefaultLanguage()) or "auto",
             width   = "half",
