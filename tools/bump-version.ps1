@@ -27,6 +27,14 @@ function Write-Text {
     [System.IO.File]::WriteAllText($Path, $Content, $utf8)
 }
 
+function Write-Json {
+    param(
+        [Parameter(Mandatory = $true)][string] $Path,
+        [Parameter(Mandatory = $true)] $Value
+    )
+    Write-Text $Path (($Value | ConvertTo-Json -Depth 20) + "`n")
+}
+
 function Get-RegexValue {
     param(
         [Parameter(Mandatory = $true)][string] $Content,
@@ -93,6 +101,7 @@ function Test-ApiVersionList {
 
 $manifest = Join-Path $root "EZOAuto.txt"
 $core = Join-Path $root "modules\core.lua"
+$configPath = Join-Path $root "ezo-addon.json"
 
 if (-not (Test-Path -LiteralPath $manifest)) {
     throw "Manifest not found: $manifest"
@@ -100,19 +109,34 @@ if (-not (Test-Path -LiteralPath $manifest)) {
 if (-not (Test-Path -LiteralPath $core)) {
     throw "Core version file not found: $core"
 }
+if (-not (Test-Path -LiteralPath $configPath)) {
+    throw "Addon metadata not found: $configPath"
+}
 
 $manifestText = Read-Text $manifest
 $coreText = Read-Text $core
+$config = Read-Text $configPath | ConvertFrom-Json
 
 $manifestVersion = Get-RegexValue $manifestText '^## Version:\s*(.+?)\s*$'
 $manifestAddOnVersion = Get-RegexValue $manifestText '^## AddOnVersion:\s*(\d+)\s*$'
 $manifestApiVersion = Get-RegexValue $manifestText '^## APIVersion:\s*(.+?)\s*$'
 $coreVersion = Get-RegexValue $coreText '^\s*EZOAuto\.ADDON_VERSION\s*=\s*"([^"]+)"\s*$'
+$configVersion = [string]$config.addon.version
+$package = $config.addon.package
+$expectedZipName = "EZOAuto_v$configVersion.zip"
 
 if ($Check) {
     $ok = $true
     if ($manifestVersion -ne $coreVersion) {
         Write-Error "Version mismatch: EZOAuto.txt=$manifestVersion modules/core.lua=$coreVersion"
+        $ok = $false
+    }
+    if ($manifestVersion -ne $configVersion) {
+        Write-Error "Version mismatch: EZOAuto.txt=$manifestVersion ezo-addon.json=$configVersion"
+        $ok = $false
+    }
+    if (-not $package -or $package.zipName -ne $expectedZipName) {
+        Write-Error "Zip name mismatch: ezo-addon.json='$($package.zipName)' expected '$expectedZipName'"
         $ok = $false
     }
     if (-not $manifestAddOnVersion) {
@@ -164,8 +188,8 @@ if (-not $Version) {
     throw "Pass -Version <x.y.z>, or use -Patch, or use -Check."
 }
 
-if ($manifestVersion -ne $coreVersion) {
-    throw "Refusing to bump from inconsistent state: EZOAuto.txt=$manifestVersion modules/core.lua=$coreVersion"
+if ($manifestVersion -ne $coreVersion -or $manifestVersion -ne $configVersion) {
+    throw "Refusing to bump from inconsistent state: EZOAuto.txt=$manifestVersion modules/core.lua=$coreVersion ezo-addon.json=$configVersion"
 }
 
 if (-not $PSBoundParameters.ContainsKey("AddOnVersion")) {
@@ -187,6 +211,10 @@ Write-Text $manifest $manifestText
 
 $coreText = Set-RegexValue $coreText '^(\s*EZOAuto\.ADDON_VERSION\s*=\s*")[^"]+("\s*)$' $Version
 Write-Text $core $coreText
+
+$config.addon.version = $Version
+$package.zipName = "EZOAuto_v$Version.zip"
+Write-Json $configPath $config
 
 Write-Host "Version updated to $Version / AddOnVersion $AddOnVersion"
 if ($ApiVersion) {

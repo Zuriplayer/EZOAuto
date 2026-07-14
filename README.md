@@ -7,7 +7,8 @@ Support, feedback, bug reports and suggestions: https://discord.gg/ekw8zUAcRm
 
 The addon is intentionally narrow in scope:
 
-- one LibAddonMenu settings panel;
+- one settings panel, hosted in `Settings > EZO` when EZOCore is available and
+  registered directly with LibAddonMenu as a compatibility fallback;
 - settings grouped by purpose, with contextual help on each section header and field;
 - English and Spanish localization;
 - no side menu;
@@ -21,8 +22,8 @@ EZOAuto is currently in beta. Features are designed to be opt-in and reversible,
 
 ## Version Metadata
 
-- Addon version: `0.1.20`
-- AddOnVersion: `10020`
+- Addon version: `0.1.21`
+- AddOnVersion: `10021`
 - APIVersion: `101049 101050`
 - Status: early beta
 
@@ -35,6 +36,7 @@ Optional:
 
 - LibChatMessage
 - LibDebugLogger / DebugLogViewer
+- EZOCore (central `Settings > EZO` integration and shared language mode)
 
 ## Features
 
@@ -113,7 +115,8 @@ Every automation is opt-in and can be disabled independently from LibAddonMenu.
 1. Install the required dependency, LibAddonMenu-2.0.
 2. Copy the `EZOAuto` folder into your ESO AddOns directory.
 3. Enable EZOAuto from the ESO Add-Ons screen.
-4. Configure options from the in-game addon settings panel.
+4. Configure options from `Settings > EZO` when EZOCore is enabled, or from the
+   standard addon settings list when using the standalone fallback.
 
 The panel groups settings into General, Merchant Automation, Group Automation, Activity Finder, Group Visibility, Environment Automation, Deconstruction, and Debug sections. Hover a purple information icon for section-level context, or an individual field for its specific help.
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.21 - Beta
+
+- Integrated the existing settings panel into `Settings > EZO` when EZOCore is available.
+- Preserved the standalone LibAddonMenu panel as a compatibility fallback.
+- Declared the runtime lifecycle stage as beta and added the permanent Discord feedback link to the panel header.
+- Extended the version helper to validate and update `ezo-addon.json` and its package filename.
+
 ## 0.1.20 - Beta
 
 - Reorganized the LibAddonMenu panel into focused functional sections without changing settings or behavior.

@@ -4,6 +4,8 @@ local MENU = EZOAuto_Menu
 
 local ADDON_NAME = "EZOAuto"
 local DISPLAY_NAME = "E|cB040FFZ|rOAuto"
+local PANEL_ID = "EZOAuto_Panel"
+local FEEDBACK_URL = "https://discord.gg/ekw8zUAcRm"
 
 local function WarnForcedLanguage()
     if EZOAuto and type(EZOAuto.Print) == "function" then
@@ -489,13 +491,24 @@ function MENU.Init()
         displayName         = DISPLAY_NAME,
         author              = "@Zuriplayer",
         version             = EZOAuto.ADDON_VERSION,
+        ezoStage            = "beta",
+        feedback            = FEEDBACK_URL,
         registerForRefresh  = true,
         registerForDefaults = true,
     }
 
-    local panel = LAM:RegisterAddonPanel("EZOAuto_Panel", panelData)
+    local options = GetOptions()
+    if EZOCore and type(EZOCore.RegisterSettingsPanel) == "function" then
+        local registered = EZOCore:RegisterSettingsPanel(ADDON_NAME, PANEL_ID, panelData, options)
+        if registered then
+            EZOAuto.ezoSettingsRegistered = true
+            return
+        end
+    end
+
+    local panel = LAM:RegisterAddonPanel(PANEL_ID, panelData)
     EZOAuto._lamPanel = panel
     _G.EZOAuto_Panel = panel
 
-    LAM:RegisterOptionControls("EZOAuto_Panel", GetOptions())
+    LAM:RegisterOptionControls(PANEL_ID, options)
 end
