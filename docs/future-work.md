@@ -108,7 +108,7 @@ Estado de pruebas:
 Implementado:
 
 - Ocultar mascota cosmetica al entrar en zonas conocidas de trial mediante `GetZoneId(GetUnitZoneIndex("player"))`, `GetActiveCollectibleByType(COLLECTIBLE_CATEGORY_TYPE_VANITY_PET)` y `UseCollectible`.
-- Cerrar libros automaticamente con `EVENT_SHOW_BOOK` y `SCENE_MANAGER:ShowBaseScene()`, dejando abrir el mismo interactuable en el segundo intento.
+- Cerrar libros automaticamente con `EVENT_SHOW_BOOK` y `SCENE_MANAGER:ShowBaseScene()` tras un retardo breve, dejando abierto el mismo libro si se vuelve a abrir en pocos segundos.
 
 Referencias revisadas:
 
@@ -125,4 +125,4 @@ Decision para EZOAuto:
 Estado de pruebas:
 
 - Retirada de mascota en trial: parece funcionar; se deja como esta.
-- Libros/lorebooks/estanterias: parece funcionar.
+- Libros/lorebooks/estanterias: cierre diferido pendiente de reconfirmar en teclado y gamepad.

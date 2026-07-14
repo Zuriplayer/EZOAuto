@@ -20,8 +20,8 @@ EZOAuto is currently in beta. Features are designed to be opt-in and reversible,
 
 ## Version Metadata
 
-- Addon version: `0.1.18`
-- AddOnVersion: `10018`
+- Addon version: `0.1.19`
+- AddOnVersion: `10019`
 - APIVersion: `101049 101050`
 - Status: early beta
 
@@ -86,7 +86,7 @@ It **does not press the final deconstruction confirmation** and does not destroy
 ### Environment Automation
 
 - Optional vanity pet dismiss in known trial zones.
-- Optional auto-close books, with a second opening of the same book left open so it can be read.
+- Optional delayed auto-close for books, with the same book left open when reopened within a few seconds so it can be read.
 
 ### Language And Diagnostics
 

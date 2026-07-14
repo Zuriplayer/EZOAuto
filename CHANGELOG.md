@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.19 - Beta
+
+- Delayed automatic book closing until ESO has opened the lore reader scene.
+- Limited the repeated-book reading exception to a short time window instead of keeping it indefinitely.
+- Added lightweight Debug Viewer messages for event registration and close results.
+
 ## 0.1.18 - Beta
 
 - Added an independent opt-in option to accept ordinary player group invitations.

@@ -20,8 +20,8 @@ EZOAuto está actualmente en beta. Las funciones son opcionales y reversibles, p
 
 ## Metadatos de versión
 
-- Versión del addon: `0.1.18`
-- AddOnVersion: `10018`
+- Versión del addon: `0.1.19`
+- AddOnVersion: `10019`
 - APIVersion: `101049 101050`
 - Estado: beta temprana
 
@@ -86,7 +86,7 @@ EZOAuto **no pulsa la confirmación final de deconstrucción** y no destruye obj
 ### Automatizaciones de entorno
 
 - Ocultar opcionalmente la mascota cosmética en zonas conocidas de trial.
-- Cerrar libros automáticamente de forma opcional, dejando abierto el mismo libro si se abre una segunda vez para poder leerlo.
+- Cerrar libros automáticamente con un retardo breve, dejando abierto el mismo libro si se vuelve a abrir en pocos segundos para poder leerlo.
 
 ### Idioma y diagnóstico
 

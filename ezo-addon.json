@@ -3,14 +3,14 @@
   "addon": {
     "id": "ezoauto",
     "name": "EZOAuto",
-    "version": "0.1.18",
+    "version": "0.1.19",
     "status": "beta",
     "phase": "early-beta",
     "visibility": "public",
     "manifest": "EZOAuto.txt",
     "package": {
       "rootFolderName": "EZOAuto",
-      "zipName": "EZOAuto_v0.1.18.zip",
+      "zipName": "EZOAuto_v0.1.19.zip",
       "outputPath": "dist",
       "include": [
         "*.txt",
