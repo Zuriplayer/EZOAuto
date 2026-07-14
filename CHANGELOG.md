@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.20 - Beta
+
+- Reorganized the LibAddonMenu panel into focused functional sections without changing settings or behavior.
+- Replaced permanent explanatory paragraphs with contextual section-header tooltips and purple information icons.
+- Kept field-specific help available on every setting and synchronized the English and Spanish panel text.
+
 ## 0.1.19 - Beta
 
 - Delayed automatic book closing until ESO has opened the lore reader scene.

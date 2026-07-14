@@ -1,11 +1,11 @@
 ## Title: E|cB040FFZ|rOAuto
 ## Author: @Zuriplayer
 ## Description: Optional automations for merchants, groups, Activity Finder, and safe deconstruction.
-## Version: 0.1.19
-## AddOnVersion: 10019
+## Version: 0.1.20
+## AddOnVersion: 10020
 ## APIVersion: 101049 101050
 ## DependsOn: LibAddonMenu-2.0
-## OptionalDependsOn: LibChatMessage LibDebugLogger DebugLogViewer
+## OptionalDependsOn: LibChatMessage LibDebugLogger DebugLogViewer EZOCore
 ## SavedVariables: EZOAuto_Saved
 
 lang/en.lua
@@ -22,4 +22,5 @@ modules/pets.lua
 modules/books.lua
 modules/nameplates.lua
 modules/deconstruction.lua
+modules/lam_helpers.lua
 modules/menu.lua

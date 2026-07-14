@@ -8,6 +8,7 @@ Soporte, comentarios, informes de errores y sugerencias: https://discord.gg/ekw8
 El addon mantiene un alcance reducido a propósito:
 
 - un único panel de ajustes con LibAddonMenu;
+- ajustes agrupados por finalidad, con ayuda contextual en cada cabecera y campo;
 - localización en inglés y español;
 - sin menú lateral;
 - sin overlay;
@@ -20,8 +21,8 @@ EZOAuto está actualmente en beta. Las funciones son opcionales y reversibles, p
 
 ## Metadatos de versión
 
-- Versión del addon: `0.1.19`
-- AddOnVersion: `10019`
+- Versión del addon: `0.1.20`
+- AddOnVersion: `10020`
 - APIVersion: `101049 101050`
 - Estado: beta temprana
 
@@ -113,6 +114,8 @@ Todas las automatizaciones son opcionales y se pueden desactivar individualmente
 2. Copia la carpeta `EZOAuto` dentro de la carpeta de AddOns de ESO.
 3. Activa EZOAuto desde la pantalla de complementos de ESO.
 4. Configura las opciones desde el panel de ajustes de addons dentro del juego.
+
+El panel agrupa los ajustes en General, Automatización de mercader, Automatización de grupo, Buscador de actividades, Visibilidad del grupo, Automatización del entorno, Deconstrucción y Depuración. Pasa el cursor por un icono informativo morado para consultar el contexto de la sección o por un campo para ver su ayuda específica.
 
 ## Notas de prueba
 

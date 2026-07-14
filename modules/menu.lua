@@ -48,8 +48,9 @@ end
 
 local function GetOptions()
     local EZOA = EZOAuto
+    local CreateInfoHeader = EZOAuto_LAM.CreateInfoHeader
     local options = {
-        { type = "header", name = GetString(EZOA_OPTION_GENERAL) },
+        CreateInfoHeader(GetString(EZOA_OPTION_GENERAL), GetString(EZOA_OPTION_GENERAL_TOOLTIP)),
         {
             type          = "dropdown",
             name          = GetString(EZOA_OPTION_LANGUAGE),
@@ -71,8 +72,10 @@ local function GetOptions()
             tooltip = GetString(EZOA_OPTION_LANGUAGE_TOOLTIP),
         },
 
-        { type = "header", name = GetString(EZOA_OPTION_AUTOMATION) },
-        { type = "description", text = GetString(EZOA_OPTION_AUTOMATION_NOTE), width = "full" },
+        CreateInfoHeader(
+            GetString(EZOA_OPTION_MERCHANT_AUTOMATION),
+            GetString(EZOA_OPTION_MERCHANT_AUTOMATION_TOOLTIP)
+        ),
         {
             type    = "checkbox",
             name    = GetString(EZOA_OPTION_SELL_ORNATE),
@@ -125,6 +128,10 @@ local function GetOptions()
             default = false,
             width   = "full",
         },
+        CreateInfoHeader(
+            GetString(EZOA_OPTION_GROUP_AUTOMATION),
+            GetString(EZOA_OPTION_GROUP_AUTOMATION_TOOLTIP)
+        ),
         {
             type    = "checkbox",
             name    = GetString(EZOA_OPTION_GROUP_CHAT),
@@ -134,6 +141,20 @@ local function GetOptions()
             default = false,
             width   = "full",
         },
+        {
+            type    = "checkbox",
+            name    = GetString(EZOA_OPTION_AUTO_ACCEPT_GROUP_INVITES),
+            tooltip = GetString(EZOA_OPTION_AUTO_ACCEPT_GROUP_INVITES_TOOLTIP),
+            getFunc = function() return EZOA.sv.automation.autoAcceptGroupInvites == true end,
+            setFunc = SetGroupInviteOption,
+            default = false,
+            width   = "full",
+        },
+
+        CreateInfoHeader(
+            GetString(EZOA_OPTION_ENVIRONMENT_AUTOMATION),
+            GetString(EZOA_OPTION_ENVIRONMENT_AUTOMATION_TOOLTIP)
+        ),
         {
             type    = "checkbox",
             name    = GetString(EZOA_OPTION_AUTO_DISMISS_PET_TRIAL),
@@ -152,19 +173,11 @@ local function GetOptions()
             default = false,
             width   = "full",
         },
-        { type = "header", name = GetString(EZOA_OPTION_GROUP_INVITATIONS) },
-        { type = "description", text = GetString(EZOA_OPTION_GROUP_INVITATIONS_NOTE), width = "full" },
-        {
-            type    = "checkbox",
-            name    = GetString(EZOA_OPTION_AUTO_ACCEPT_GROUP_INVITES),
-            tooltip = GetString(EZOA_OPTION_AUTO_ACCEPT_GROUP_INVITES_TOOLTIP),
-            getFunc = function() return EZOA.sv.automation.autoAcceptGroupInvites == true end,
-            setFunc = SetGroupInviteOption,
-            default = false,
-            width   = "full",
-        },
-        { type = "header", name = GetString(EZOA_OPTION_ACTIVITY_FINDER) },
-        { type = "description", text = GetString(EZOA_OPTION_ACTIVITY_FINDER_NOTE), width = "full" },
+
+        CreateInfoHeader(
+            GetString(EZOA_OPTION_ACTIVITY_FINDER),
+            GetString(EZOA_OPTION_ACTIVITY_FINDER_TOOLTIP)
+        ),
         {
             type    = "checkbox",
             name    = GetString(EZOA_OPTION_AF_SOUND_ALERT),
@@ -277,8 +290,10 @@ local function GetOptions()
             default = false,
             width   = "full",
         },
-        { type = "header", name = GetString(EZOA_OPTION_GROUP_VISIBILITY) },
-        { type = "description", text = GetString(EZOA_OPTION_GROUP_VISIBILITY_NOTE), width = "full" },
+        CreateInfoHeader(
+            GetString(EZOA_OPTION_GROUP_VISIBILITY),
+            GetString(EZOA_OPTION_GROUP_VISIBILITY_TOOLTIP)
+        ),
         {
             type    = "checkbox",
             name    = GetString(EZOA_OPTION_HIDE_GROUP_NAMES_GROUPED),
@@ -326,8 +341,10 @@ local function GetOptions()
             default = false,
             width   = "full",
         },
-        { type = "header", name = GetString(EZOA_OPTION_DECONSTRUCTION) },
-        { type = "description", text = GetString(EZOA_OPTION_DECONSTRUCTION_NOTE), width = "full" },
+        CreateInfoHeader(
+            GetString(EZOA_OPTION_DECONSTRUCTION),
+            GetString(EZOA_OPTION_DECONSTRUCTION_TOOLTIP)
+        ),
         {
             type    = "checkbox",
             name    = GetString(EZOA_OPTION_DECON_PREVIEW),
@@ -425,7 +442,7 @@ local function GetOptions()
             width   = "full",
         },
 
-        { type = "header", name = GetString(EZOA_OPTION_DEBUG) },
+        CreateInfoHeader(GetString(EZOA_OPTION_DEBUG), GetString(EZOA_OPTION_DEBUG_TOOLTIP)),
         {
             type    = "checkbox",
             name    = GetString(EZOA_OPTION_DEBUG_MODE),
