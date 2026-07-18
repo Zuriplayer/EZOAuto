@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.22 - Beta
+
+- Registers the existing debug mode with EZOCore for family-wide disable control.
+- Keeps the local debug setting and optional Log Viewer behavior unchanged without EZOCore.
+
 ## 0.1.21 - Beta
 
 - Integrated the existing settings panel into `Settings > EZO` when EZOCore is available.

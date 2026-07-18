@@ -12,6 +12,7 @@ EZOA.LANGUAGE_AUTO = LANGUAGE_AUTO
 
 local languageCallbackRegistered = false
 local ezocoreRegistered = false
+local debugControllerRegistered = false
 
 local function Print(message)
     if LibChatMessage then
@@ -114,12 +115,13 @@ function EZOA.RegisterWithEZOCore()
             id = "ezoauto",
             name = EZOA.ADDON_NAME or ADDON_NAME,
             version = EZOA.ADDON_VERSION or "0.0.0",
-            addOnVersion = 10021,
+            addOnVersion = 10022,
             apiVersion = 1,
             capabilities = {
                 "automation.activityFinder",
                 "automation.groupInvites",
                 "automation.merchant",
+                "family.debug.controller",
                 "family.language.consumer",
                 "family.settings.consumer",
             },
@@ -128,6 +130,39 @@ function EZOA.RegisterWithEZOCore()
 
     ezocoreRegistered = ok and result == true
     return ezocoreRegistered
+end
+
+function EZOA.RegisterDebugWithEZOCore()
+    if debugControllerRegistered
+        or not (EZOCore and type(EZOCore.GetService) == "function") then
+        return false
+    end
+
+    local service = EZOCore:GetService("family.debug", 1)
+    if not service or type(service.RegisterController) ~= "function" then
+        return false
+    end
+
+    local ok, result = pcall(function()
+        return service:RegisterController({
+            id = "ezoauto.debug",
+            addonId = "ezoauto",
+            addonName = "EZOAuto",
+            name = function() return GetString(EZOA_OPTION_DEBUG_MODE) end,
+            isEnabled = function()
+                return EZOA.IsDebugModeEnabled and EZOA.IsDebugModeEnabled() == true
+            end,
+            setEnabled = function(enabled)
+                if EZOA.SetDebugModeEnabled then
+                    EZOA.SetDebugModeEnabled(enabled == true)
+                end
+                return EZOA.IsDebugModeEnabled and EZOA.IsDebugModeEnabled() == (enabled == true)
+            end,
+        })
+    end)
+
+    debugControllerRegistered = ok and result == true
+    return debugControllerRegistered
 end
 
 function EZOA:Initialize()
@@ -186,6 +221,7 @@ function EZOA:Initialize()
     EZOA.ApplyLanguagePreference(self.sv.general.language or EZOA.GetDefaultLanguage())
     EZOA.RegisterEZOCoreLanguageCallback()
     EZOA.RegisterWithEZOCore()
+    EZOA.RegisterDebugWithEZOCore()
 
     if self.DebugLog then
         self.DebugLog(GetString(EZOA_DEBUG_SAVED_VARIABLES_LOADED))

@@ -1,8 +1,8 @@
 ## Title: E|cB040FFZ|rOAuto
 ## Author: @Zuriplayer
-## Description: Optional automations for merchants, groups, Activity Finder, and safe deconstruction.
-## Version: 0.1.21
-## AddOnVersion: 10021
+## Description: Optional automations for merchants, groups, Activity Finder, and safe deconstruction. Optional add-ons: LibChatMessage, LibDebugLogger, DebugLogViewer, EZOCore.
+## Version: 0.1.22
+## AddOnVersion: 10022
 ## APIVersion: 101049 101050
 ## DependsOn: LibAddonMenu-2.0
 ## OptionalDependsOn: LibChatMessage LibDebugLogger DebugLogViewer EZOCore
