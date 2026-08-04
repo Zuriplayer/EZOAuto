@@ -22,8 +22,8 @@ EZOAuto is currently in beta. Features are designed to be opt-in and reversible,
 
 ## Version Metadata
 
-- Addon version: `0.1.22`
-- AddOnVersion: `10022`
+- Addon version: `0.1.23`
+- AddOnVersion: `10023`
 - APIVersion: `101049 101050`
 - Status: early beta
 
@@ -71,6 +71,8 @@ EZOAuto can preview safe deconstruction candidates in Debug Viewer and prepare E
 - Respect the active category filter at the universal deconstructor.
 
 It **does not press the final deconstruction confirmation** and does not destroy items by itself. The final destructive action stays manual.
+
+Source and item-category checkboxes become available immediately when either preview or queue preparation is enabled.
 
 ### Activity Finder
 

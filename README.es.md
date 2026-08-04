@@ -22,8 +22,8 @@ EZOAuto está actualmente en beta. Las funciones son opcionales y reversibles, p
 
 ## Metadatos de versión
 
-- Versión del addon: `0.1.22`
-- AddOnVersion: `10022`
+- Versión del addon: `0.1.23`
+- AddOnVersion: `10023`
 - APIVersion: `101049 101050`
 - Estado: beta temprana
 
@@ -71,6 +71,8 @@ EZOAuto puede mostrar en Debug Viewer una vista previa de candidatos seguros y p
 - Respeta el filtro de categoría activo en el deconstructor universal.
 
 EZOAuto **no pulsa la confirmación final de deconstrucción** y no destruye objetos por sí mismo. La acción destructiva final queda siempre en manos del usuario.
+
+Las casillas de origen y categoría de objeto se activan inmediatamente al habilitar la previsualización o la preparación de cola.
 
 ### Activity Finder
 

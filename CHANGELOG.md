@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.23 - Beta
+
+- Refreshes Deconstruction dependent controls immediately after enabling or disabling preview or queue preparation.
+- Keeps the behavior consistent in the standalone LibAddonMenu panel and the EZOCore settings host.
+
 ## 0.1.22 - Beta
 
 - Registers the existing debug mode with EZOCore for family-wide disable control.

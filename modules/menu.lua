@@ -48,6 +48,25 @@ local function SetBookOption(key, value)
     end
 end
 
+local function RefreshSettingsPanel()
+    if EZOAuto.ezoSettingsRegistered
+        and EZOCore
+        and type(EZOCore.RefreshSettingsPanel) == "function" then
+        EZOCore:RefreshSettingsPanel()
+        return
+    end
+
+    local LAM = LibAddonMenu2
+    if LAM and LAM.util and LAM.util.RequestRefreshIfNeeded and EZOAuto._lamPanel then
+        LAM.util.RequestRefreshIfNeeded(EZOAuto._lamPanel)
+    end
+end
+
+local function SetDeconstructionOption(key, value)
+    EZOAuto.sv.automation[key] = value == true
+    RefreshSettingsPanel()
+end
+
 local function GetOptions()
     local EZOA = EZOAuto
     local CreateInfoHeader = EZOAuto_LAM.CreateInfoHeader
@@ -368,7 +387,7 @@ local function GetOptions()
             name    = GetString(EZOA_OPTION_DECON_PREVIEW),
             tooltip = GetString(EZOA_OPTION_DECON_PREVIEW_TOOLTIP),
             getFunc = function() return EZOA.sv.automation.previewDeconstructionAtStation == true end,
-            setFunc = function(value) EZOA.sv.automation.previewDeconstructionAtStation = value == true end,
+            setFunc = function(value) SetDeconstructionOption("previewDeconstructionAtStation", value) end,
             default = false,
             width   = "full",
         },
@@ -377,7 +396,7 @@ local function GetOptions()
             name    = GetString(EZOA_OPTION_DECON_QUEUE),
             tooltip = GetString(EZOA_OPTION_DECON_QUEUE_TOOLTIP),
             getFunc = function() return EZOA.sv.automation.queueDeconstructionAtStation == true end,
-            setFunc = function(value) EZOA.sv.automation.queueDeconstructionAtStation = value == true end,
+            setFunc = function(value) SetDeconstructionOption("queueDeconstructionAtStation", value) end,
             default = false,
             width   = "full",
         },
