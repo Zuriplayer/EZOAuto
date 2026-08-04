@@ -36,3 +36,7 @@ temp/
 *.tmp
 *.bak
 *.orig
+
+# Keep shared AI project instructions versioned.
+!AGENTS.md
+!CLAUDE.md
