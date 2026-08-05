@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.24 - Beta
+
+- Defers and forces the EZOCore settings-panel rebuild after changing a Deconstruction master option, so dependent controls immediately reflect their enabled state.
+
 ## 0.1.23 - Beta
 
 - Refreshes Deconstruction dependent controls immediately after enabling or disabling preview or queue preparation.

@@ -49,16 +49,24 @@ local function SetBookOption(key, value)
 end
 
 local function RefreshSettingsPanel()
-    if EZOAuto.ezoSettingsRegistered
-        and EZOCore
-        and type(EZOCore.RefreshSettingsPanel) == "function" then
-        EZOCore:RefreshSettingsPanel()
-        return
+    local function Refresh()
+        if EZOAuto.ezoSettingsRegistered
+            and EZOCore
+            and type(EZOCore.RefreshSettingsPanel) == "function" then
+            pcall(function() EZOCore:RefreshSettingsPanel(true) end)
+            return
+        end
+
+        local LAM = LibAddonMenu2
+        if LAM and LAM.util and LAM.util.RequestRefreshIfNeeded and EZOAuto._lamPanel then
+            pcall(LAM.util.RequestRefreshIfNeeded, EZOAuto._lamPanel)
+        end
     end
 
-    local LAM = LibAddonMenu2
-    if LAM and LAM.util and LAM.util.RequestRefreshIfNeeded and EZOAuto._lamPanel then
-        LAM.util.RequestRefreshIfNeeded(EZOAuto._lamPanel)
+    if zo_callLater then
+        zo_callLater(Refresh, 1)
+    else
+        Refresh()
     end
 end
 
