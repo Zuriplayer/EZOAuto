@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.25 - Beta
+
+- Adds an explicit, default-off option to include Legendary-quality items in safe deconstruction.
+- Uses the native deconstruction panel when preparing normal smithing queues in keyboard and gamepad modes.
+
 ## 0.1.24 - Beta
 
 - Defers and forces the EZOCore settings-panel rebuild after changing a Deconstruction master option, so dependent controls immediately reflect their enabled state.

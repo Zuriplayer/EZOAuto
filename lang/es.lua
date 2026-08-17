@@ -90,6 +90,11 @@ EZOAUTO_STRINGS_ES = {
     EZOA_OPTION_DECON_JEWELRY_TOOLTIP = "Cuenta joyas validas para deconstruccion segura.",
     EZOA_OPTION_DECON_GLYPHS = "Glifos/runas",
     EZOA_OPTION_DECON_GLYPHS_TOOLTIP = "Cuenta glifos validos para extraccion. Las runas sueltas se descartan si ESO no las marca como deconstruibles.",
+    EZOA_OPTION_DECON_LEGENDARY = "Incluir objetos legendarios (amarillos)",
+    EZOA_OPTION_DECON_LEGENDARY_TOOLTIP = "Permite objetos de calidad legendaria que superen el resto de reglas "
+        .. "de seguridad. Esta opción siempre está desactivada de forma predeterminada. Los objetos fabricados "
+        .. "por jugadores, robados, bloqueados, protegidos, ornamentados, de compañero o no deconstruibles "
+        .. "siguen excluidos.",
 
     EZOA_OPTION_ENVIRONMENT_AUTOMATION = "Automatizacion del entorno",
     EZOA_OPTION_ENVIRONMENT_AUTOMATION_TOOLTIP = "Configura la automatizacion opcional de mascotas cosmeticas en zonas conocidas de trial y de libros abiertos desde interactuables.",

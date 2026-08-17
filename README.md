@@ -66,7 +66,8 @@ EZOAuto can preview safe deconstruction candidates in Debug Viewer and prepare E
 
 - Choose inventory and, when exposed by ESO, bank and ESO Plus bank sources.
 - Choose weapons, armor, jewelry, and glyphs/runes independently.
-- Reject stolen, locked, protected, Legendary, Ornate, companion, and non-deconstructable items.
+- Reject Legendary items by default; an explicit option can include them and is always off by default.
+- Continue rejecting stolen, locked, protected, Ornate, companion, and non-deconstructable items.
 - Reject player-crafted equipment; crafted glyphs remain eligible for the normal extraction workflow.
 - Respect the active category filter at the universal deconstructor.
 

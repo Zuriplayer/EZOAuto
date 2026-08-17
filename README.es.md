@@ -66,7 +66,8 @@ EZOAuto puede mostrar en Debug Viewer una vista previa de candidatos seguros y p
 
 - Permite elegir inventario y, cuando ESO los expone, banco y banco de ESO Plus.
 - Permite elegir por separado armas, armaduras, joyería y glifos/runas.
-- Rechaza objetos robados, bloqueados, protegidos, legendarios, ornamentados, de compañero o no deconstruibles.
+- Rechaza objetos legendarios de forma predeterminada; una opción explícita permite incluirlos y siempre está desactivada por defecto.
+- Sigue rechazando objetos robados, bloqueados, protegidos, ornamentados, de compañero o no deconstruibles.
 - Rechaza equipo fabricado por jugadores; los glifos fabricados siguen siendo válidos para el flujo normal de extracción.
 - Respeta el filtro de categoría activo en el deconstructor universal.
 

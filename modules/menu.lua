@@ -486,6 +486,19 @@ local function GetOptions()
             default = true,
             width   = "full",
         },
+        {
+            type    = "checkbox",
+            name    = GetString(EZOA_OPTION_DECON_LEGENDARY),
+            tooltip = GetString(EZOA_OPTION_DECON_LEGENDARY_TOOLTIP),
+            getFunc = function() return EZOA.sv.automation.deconstructLegendary == true end,
+            setFunc = function(value) EZOA.sv.automation.deconstructLegendary = value == true end,
+            disabled = function()
+                return EZOA.sv.automation.previewDeconstructionAtStation ~= true
+                    and EZOA.sv.automation.queueDeconstructionAtStation ~= true
+            end,
+            default = false,
+            width   = "full",
+        },
 
         CreateInfoHeader(GetString(EZOA_OPTION_DEBUG), GetString(EZOA_OPTION_DEBUG_TOOLTIP)),
         {

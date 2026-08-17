@@ -90,6 +90,10 @@ EZOAUTO_STRINGS_EN = {
     EZOA_OPTION_DECON_JEWELRY_TOOLTIP = "Count jewelry that passes the safe deconstruction rules.",
     EZOA_OPTION_DECON_GLYPHS = "Glyphs/runes",
     EZOA_OPTION_DECON_GLYPHS_TOOLTIP = "Count glyphs that pass extraction rules. Loose runes are skipped if ESO does not mark them as deconstructable.",
+    EZOA_OPTION_DECON_LEGENDARY = "Include Legendary items",
+    EZOA_OPTION_DECON_LEGENDARY_TOOLTIP = "Allow Legendary-quality items that pass the remaining safety rules. "
+        .. "This is always off by default. Player-crafted, stolen, locked, protected, Ornate, companion, "
+        .. "and non-deconstructable items remain excluded.",
 
     EZOA_OPTION_ENVIRONMENT_AUTOMATION = "Environment automation",
     EZOA_OPTION_ENVIRONMENT_AUTOMATION_TOOLTIP = "Configure optional automation for vanity pets in known trial zones and books opened from interactables.",

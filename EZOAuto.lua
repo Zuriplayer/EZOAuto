@@ -202,6 +202,7 @@ function EZOA:Initialize()
             deconstructArmor = true,
             deconstructJewelry = true,
             deconstructGlyphs = true,
+            deconstructLegendary = false,
             hideGroupNameplatesInGroup = false,
             hideGroupNameplatesInCombat = false,
             showGroupHealthbarsAsHealer = false,

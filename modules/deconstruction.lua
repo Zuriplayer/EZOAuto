@@ -57,6 +57,11 @@ local function IsQueueEnabled()
     return automation and automation.queueDeconstructionAtStation == true
 end
 
+local function IsLegendaryEnabled()
+    local automation = GetAutomation()
+    return automation and automation.deconstructLegendary == true
+end
+
 local function IsAutomationEnabled()
     return IsPreviewEnabled() or IsQueueEnabled()
 end
@@ -322,7 +327,9 @@ local function AddCandidateIfSafe(bagId, slotIndex, stats)
         return
     end
     local quality = GetItemQuality(bagId, slotIndex)
-    if ITEM_QUALITY_LEGENDARY ~= nil and quality == ITEM_QUALITY_LEGENDARY then
+    if ITEM_QUALITY_LEGENDARY ~= nil
+        and quality == ITEM_QUALITY_LEGENDARY
+        and not IsLegendaryEnabled() then
         AddCount(stats.skipped, "legendary")
         return
     end
@@ -415,12 +422,12 @@ local function GetCraftingControl(station)
     if IsGamepadMode() then
         if station == "universal" then return _G.UNIVERSAL_DECONSTRUCTION_GAMEPAD end
         if station == "enchanting" then return _G.GAMEPAD_ENCHANTING end
-        return _G.SMITHING_GAMEPAD
+        return _G.SMITHING_GAMEPAD and _G.SMITHING_GAMEPAD.deconstructionPanel
     end
 
     if station == "universal" then return _G.UNIVERSAL_DECONSTRUCTION end
     if station == "enchanting" then return _G.ENCHANTING end
-    return _G.SMITHING
+    return _G.SMITHING and _G.SMITHING.deconstructionPanel
 end
 
 local function NewQueueStats()
