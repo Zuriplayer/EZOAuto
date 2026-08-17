@@ -22,8 +22,8 @@ EZOAuto está actualmente en beta. Las funciones son opcionales y reversibles, p
 
 ## Metadatos de versión
 
-- Versión del addon: `0.1.24`
-- AddOnVersion: `10024`
+- Versión del addon: `0.1.25`
+- AddOnVersion: `10025`
 - APIVersion: `101049 101050`
 - Estado: beta temprana
 
@@ -46,6 +46,7 @@ Todas las automatizaciones están desactivadas por defecto, se pueden activar de
 
 - Vender, mediante opciones independientes, equipo ornamentado no robado, objetos de tipo Tesoro y objetos de tipo Basura.
 - Reparar solo el equipo equipado, o el equipo equipado y el equipo reparable de la mochila.
+- Las casillas de reparación mutuamente excluyentes se actualizan inmediatamente al cambiar la reparación combinada.
 - Omitir combate, peristas, objetos robados, bloqueados o protegidos, objetos de armería, objetos de compañero y objetos sin valor de venta.
 
 ### Chat de grupo
@@ -78,12 +79,14 @@ Las casillas de origen y categoría de objeto se activan inmediatamente al habil
 
 - Opciones independientes de aceptación automática para mazmorras normales, mazmorras veteranas, Battlegrounds, Tales of Tribute casual y competitivo, trials, arenas, Archivo infinito, Visitas de casas y Exploración cuando ESO expone el tipo de actividad correspondiente.
 - Sonido repetido opcional mientras hay un ready check del Activity Finder pendiente, con un intervalo configurable entre 2 y 15 segundos.
+- El control del intervalo se actualiza inmediatamente al cambiar la alerta sonora.
 - Un único bucle local de sonido evita avisos duplicados sin modificar ni reabrir diálogos de ESO.
 - Las opciones del Activity Finder no aceptan ready checks genéricos de grupo, votaciones, invitaciones normales de grupo ni expulsiones.
 
 ### Visibilidad de grupo
 
 - Ocultar opcionalmente los nombres y barras de salud nativos de ESO para miembros del grupo mientras estás agrupado, o solo durante el combate.
+- El control de visibilidad solo en combate se actualiza inmediatamente al cambiar la ocultación mientras estás agrupado.
 - Comportamiento opcional para healer que muestra las barras de salud de compañeros heridos en PvE aunque esté activa la ocultación en combate.
 - Los valores nativos gestionados se restauran al terminar la condición o desactivar la opción; las zonas PvP no se modifican.
 - No crea HUD ni overlay propio.
@@ -131,6 +134,7 @@ Antes de depender de una función, pruébala con tu configuración:
 - apertura correcta del panel de ajustes;
 - persistencia del idioma;
 - persistencia de casillas;
+- los controles dependientes se actualizan inmediatamente al cambiar su opción maestra;
 - las invitaciones normales de grupo siguen siendo manuales con la opción desactivada y se aceptan al activarla;
 - las solicitudes de duelo, comercio, Tales of Tribute, votación, expulsión y ready checks de grupo permanecen intactas;
 - teclado y gamepad siguen siendo utilizables.

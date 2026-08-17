@@ -7,6 +7,28 @@ local DISPLAY_NAME = "E|cB040FFZ|rOAuto"
 local PANEL_ID = "EZOAuto_Panel"
 local FEEDBACK_URL = "https://discord.gg/ekw8zUAcRm"
 
+local function RefreshSettingsPanel()
+    local function Refresh()
+        if EZOAuto.ezoSettingsRegistered
+            and EZOCore
+            and type(EZOCore.RefreshSettingsPanel) == "function" then
+            pcall(function() EZOCore:RefreshSettingsPanel(true) end)
+            return
+        end
+
+        local LAM = LibAddonMenu2
+        if LAM and LAM.util and LAM.util.RequestRefreshIfNeeded and EZOAuto._lamPanel then
+            pcall(LAM.util.RequestRefreshIfNeeded, EZOAuto._lamPanel)
+        end
+    end
+
+    if zo_callLater then
+        zo_callLater(Refresh, 1)
+    else
+        Refresh()
+    end
+end
+
 local function WarnForcedLanguage()
     if EZOAuto and type(EZOAuto.Print) == "function" then
         EZOAuto.Print(GetString(EZOA_MSG_LANGUAGE_FORCED_WARNING))
@@ -17,6 +39,9 @@ local function SetActivityFinderOption(key, value)
     EZOAuto.sv.automation[key] = value == true
     if EZOAuto_ActivityFinder and EZOAuto_ActivityFinder.RefreshRegistration then
         EZOAuto_ActivityFinder.RefreshRegistration()
+    end
+    if key == "activityFinderSoundAlert" then
+        RefreshSettingsPanel()
     end
 end
 
@@ -45,28 +70,6 @@ local function SetBookOption(key, value)
     EZOAuto.sv.automation[key] = value == true
     if EZOAuto_Books and EZOAuto_Books.RefreshRegistration then
         EZOAuto_Books.RefreshRegistration()
-    end
-end
-
-local function RefreshSettingsPanel()
-    local function Refresh()
-        if EZOAuto.ezoSettingsRegistered
-            and EZOCore
-            and type(EZOCore.RefreshSettingsPanel) == "function" then
-            pcall(function() EZOCore:RefreshSettingsPanel(true) end)
-            return
-        end
-
-        local LAM = LibAddonMenu2
-        if LAM and LAM.util and LAM.util.RequestRefreshIfNeeded and EZOAuto._lamPanel then
-            pcall(LAM.util.RequestRefreshIfNeeded, EZOAuto._lamPanel)
-        end
-    end
-
-    if zo_callLater then
-        zo_callLater(Refresh, 1)
-    else
-        Refresh()
     end
 end
 
@@ -169,6 +172,7 @@ local function GetOptions()
                 if value then
                     EZOA.sv.automation.repairEquippedAtMerchant = false
                 end
+                RefreshSettingsPanel()
             end,
             default = false,
             width   = "full",
@@ -353,6 +357,7 @@ local function GetOptions()
                 if EZOAuto_Nameplates and EZOAuto_Nameplates.Refresh then
                     EZOAuto_Nameplates.Refresh("settings changed")
                 end
+                RefreshSettingsPanel()
             end,
             default = false,
             width   = "full",

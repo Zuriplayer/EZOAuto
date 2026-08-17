@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.25 - Beta
+
+- Refreshes all remaining dependent LAM controls immediately after changing their master option: repair mode, Activity Finder sound alert, and grouped nameplate hiding.
+- Keeps the existing standalone LibAddonMenu and EZOCore-hosted settings paths synchronized without changing defaults or SavedVariables.
+
 ## 0.1.24 - Beta
 
 - Defers and forces the EZOCore settings-panel rebuild after changing a Deconstruction master option, so dependent controls immediately reflect their enabled state.

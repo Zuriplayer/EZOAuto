@@ -22,8 +22,8 @@ EZOAuto is currently in beta. Features are designed to be opt-in and reversible,
 
 ## Version Metadata
 
-- Addon version: `0.1.24`
-- AddOnVersion: `10024`
+- Addon version: `0.1.25`
+- AddOnVersion: `10025`
 - APIVersion: `101049 101050`
 - Status: early beta
 
@@ -46,6 +46,7 @@ All automations are disabled by default and can be enabled independently. Settin
 
 - Sell non-stolen Ornate equipment, Treasure items, and Trash items through independent options.
 - Repair equipped gear only, or equipped gear plus repairable gear in the backpack.
+- The mutually exclusive repair controls update immediately when the combined repair option changes.
 - Skip combat, fences, stolen items, locked or protected items, Armory items, companion items, and items without vendor value.
 
 ### Group Chat
@@ -78,12 +79,14 @@ Source and item-category checkboxes become available immediately when either pre
 
 - Independent auto-accept options for normal dungeons, veteran dungeons, Battlegrounds, casual and competitive Tales of Tribute, trials, arenas, Endless Archive, Home Tours, and Exploration when ESO exposes the matching activity type.
 - Optional repeated sound while an Activity Finder ready check is pending, with a configurable delay from 2 to 15 seconds.
+- The repeat-delay control updates immediately when the sound alert option changes.
 - A single local sound loop avoids duplicate alerts without modifying or reopening ESO dialogs.
 - The Activity Finder options do not accept generic group ready checks, votes, ordinary group invitations, or kick prompts.
 
 ### Group Visibility
 
 - Optionally hide ESO's native group member names and health bars while grouped, or only during combat.
+- The combat-only visibility control updates immediately when grouped hiding changes.
 - Optional healer role behavior that shows injured group member health bars in PvE even when the combat hiding option is active.
 - Managed native values are restored when the condition ends or the option is disabled; PvP areas are left alone.
 - No custom HUD or overlay is created.
@@ -131,6 +134,7 @@ Before relying on a feature, test it in your own setup:
 - settings panel opens correctly;
 - language setting persists;
 - checkboxes persist;
+- dependent settings controls update immediately when their master option changes;
 - ordinary group invitations remain manual when disabled and are accepted when enabled;
 - duel, trade, Tales of Tribute, vote, kick, and group ready-check prompts remain untouched;
 - keyboard and gamepad modes remain usable.
