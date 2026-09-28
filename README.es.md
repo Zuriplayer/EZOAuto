@@ -24,7 +24,7 @@ EZOAuto está actualmente en beta. Las funciones son opcionales y reversibles, p
 
 - Versión del addon: `0.1.25`
 - AddOnVersion: `10025`
-- APIVersion: `101049 101050`
+- APIVersion: `101050 101051`
 - Estado: beta temprana
 
 ## Requisitos
